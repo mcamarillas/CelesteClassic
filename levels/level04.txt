@@ -1,0 +1,26 @@
+TILEMAP
+16 16						        -- Size of tile map in tiles
+32 32							-- Tile size & block size
+images/SpriteSheetCeleste.png 	-- Tilesheet
+7 12
+1616161617      1516161616161616
+                                
+                                
+          010203                
+          15181014              
+            0810                
+            1517        6868    
+            0103                
+            0810                
+            0810      6868      
+            0810                
+            1517            6868
+04                              
+02020203                6868    
+09090910        6868            
+090918106868                    
+            
+            
+          
+
+                  
