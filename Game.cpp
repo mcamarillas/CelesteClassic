@@ -13,7 +13,10 @@ void Game::init()
 bool Game::update(int deltaTime)
 {
 	scene.update(deltaTime);
-	
+	if (change) {
+		scene.changeLevel(level);
+		change = false;
+	}
 	return bPlay;
 }
 
@@ -25,10 +28,35 @@ void Game::render()
 
 void Game::keyPressed(int key)
 {
-	if(key == 27) // Escape code
+	if (key == 27) // Escape code
 		bPlay = false;
+	else if (key == '1') {
+		level = 1;
+		change = true;
+	}
+	else if (key == '2') {
+		level = 2;
+		change = true;
+	}
+	else if (key == '3') {
+		level = 3;
+		change = true;
+	}
+	else if (key == '4') {
+		level = 4;
+		change = true;
+	}
+	else if (key == '5') {
+		level = 5;
+		change = true;
+	}
+	else if (key == '6') {
+		level = 6;
+		change = true;
+	}
 	keys[key] = true;
 }
+
 
 void Game::keyReleased(int key)
 {
@@ -65,6 +93,13 @@ bool Game::getKey(int key) const
 bool Game::getSpecialKey(int key) const
 {
 	return specialKeys[key];
+}
+
+int Game::getLevel() {
+	return level;
+}
+int Game::hasChanged() {
+	return change;
 }
 
 
