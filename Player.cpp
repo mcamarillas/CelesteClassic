@@ -2,6 +2,9 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include <Windows.h>
+#include "MMSystem.h"
+#include "Game.h"
 #include "Player.h"
 #include "Game.h"
 
@@ -101,6 +104,7 @@ void Player::update(int deltaTime)
 		{
 			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
+				PlaySound(TEXT("Suu"), NULL, SND_FILENAME | SND_ASYNC);
 				bJumping = true;
 				jumpAngle = 0;
 				startY = posPlayer.y;
