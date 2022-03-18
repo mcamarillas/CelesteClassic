@@ -54,6 +54,14 @@ void Game::keyPressed(int key)
 		level = 6;
 		change = true;
 	}
+	else if (key == '8') {
+		level = 8;
+		change = true;
+	}
+	else if (key == '0') {
+		level = 10;
+		change = true;
+	}
 	keys[key] = true;
 }
 
