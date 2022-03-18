@@ -1,0 +1,21 @@
+TILEMAP
+16 16						        -- Size of tile map in tiles
+32 32							-- Tile size & block size
+images/SpriteSheetCeleste.png 	-- Tilesheet
+7 12	
+090910        080916161616091809
+091810        1517        151609
+090910        14              15
+090910        14                
+09091021      14                
+18091035                        
+16161714                  21    
+121212130707            0728    
+      111314            1428    
+                          35    
+                                
+                                
+                                
+                                
+  21      6868      6868        
+  28                            
