@@ -98,8 +98,13 @@ void Player::update(int deltaTime)
 		}
 		else
 		{
-			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-			if(jumpAngle > 90)
+			int py = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &py))
+			{
+				bJumping = false;
+			}
+			else posPlayer.y = py;
+			if(bJumping && jumpAngle > 90)
 				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
 		}
 	}
@@ -110,7 +115,7 @@ void Player::update(int deltaTime)
 		{
 			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
-				PlaySound(TEXT("Suu"), NULL, SND_FILENAME | SND_ASYNC);
+				//PlaySound(TEXT("Suu"), NULL, SND_FILENAME | SND_ASYNC);
 				if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT)
 					sprite->changeAnimation(JUMP_LEFT);
 				else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT)
