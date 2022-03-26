@@ -18,6 +18,4 @@ images/SpriteSheetCeleste.png 	-- Tilesheet
                                 
                                 
   0103                          
-          
-
-                  
+                                

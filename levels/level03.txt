@@ -19,4 +19,3 @@ images/SpriteSheetCeleste.png 	-- Tilesheet
                 0810        0809
 020203    48    0810      480809
 091810    21    0810      010909
-                  

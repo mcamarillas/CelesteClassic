@@ -19,5 +19,3 @@ images/SpriteSheetCeleste.png 	-- Tilesheet
 24                      68      
 31          686868              
 02020203                        
-
-

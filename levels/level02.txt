@@ -19,5 +19,3 @@ images/SpriteSheetCeleste.png 	-- Tilesheet
       35      35070707          
             0508020203          
 0202020202020209091810          
-
-

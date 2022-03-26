@@ -18,9 +18,4 @@ images/SpriteSheetCeleste.png 	-- Tilesheet
 04                              
 02020203                6868    
 09090910        6868            
-090918106868                    
-            
-            
-          
-
-                  
+090918106868                     

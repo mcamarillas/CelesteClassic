@@ -18,4 +18,4 @@ images/SpriteSheetCeleste.png 	-- Tilesheet
 12121213    14              74  
     14      14        1112121212
     14      2171        14      
-    14      28          14      
+    14      28          14       
