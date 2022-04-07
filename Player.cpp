@@ -175,6 +175,10 @@ bool Player::getUnderground() {
 
 void Player::respawn() {
 	underGround = false;
+	specialMove = 0;
+	bJumping = 0;
+	jumpAngle = 0;
+	map->respawn();
 }
 
 void Player::dash()
@@ -223,8 +227,9 @@ void Player::dash()
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	if (posPlayer.y >= 512) underGround = true;
-	else {
+	if (posPlayer.y >= 512 || (map->getSpikes())) underGround = true;
+	else {		
+
 		checkCollisions();
 		//LEFT MOVEMENT
 		if (Game::instance().getKey('x') && !isDashing)

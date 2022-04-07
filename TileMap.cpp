@@ -7,7 +7,7 @@
 
 using namespace std;
 
-vector<int> nonCollisionableBlock = { 0, 4, 5, 6, 7 , 24, 31};
+vector<int> nonCollisionableBlock = {0, 4, 5, 6, 7, 24, 31};
 
 TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
 {
@@ -174,8 +174,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 
 bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
 {
-	int x, y0, y1;
-	
+	int x, y0, y1;	
 	x = (pos.x + size.x - 1) / tileSize;
 	y0 = pos.y / tileSize;
 	y1 = (pos.y + size.y - 1) / tileSize;
@@ -188,27 +187,40 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	return false;
 }
 
-bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+bool TileMap::getSpikes() {
+	return spikes;
+}
+
+void TileMap::respawn() {
+	spikes = false;
+}
+
+
+bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) 
 {
 	int x0, x1, y;
 
 	x0 = pos.x / tileSize;
 	x1 = (pos.x + size.x - 1) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
+	bool result = false;
 
 	for (int x = x0; x <= x1; x++)
 	{
-		if (!count(nonCollisionableBlock.begin(), nonCollisionableBlock.end(), map[y*mapSize.x + x]))
+		if (!count(nonCollisionableBlock.begin(), nonCollisionableBlock.end(), map[y * mapSize.x + x]))
 		{
 			if (*posY - tileSize * y + size.y < 32)
 			{
 				*posY = tileSize * y - size.y;
-				return true;
+				result = true;
 			}
+
+			
 		}
+		if (map[(y - 1) * mapSize.x + x] == 7) spikes = true;
 	}
 
-	return false;
+	return result;
 }
 
 bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
