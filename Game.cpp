@@ -12,10 +12,12 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
+
 	scene.update(deltaTime);
-	if (change) {
+	if (change || scene.isdead()) {
 		scene.changeLevel(level);
 		change = false;
+		scene.respawn();
 	}
 	return bPlay;
 }
@@ -81,8 +83,6 @@ void Game::keyReleased(int key)
 
 void Game::specialKeyPressed(int key)
 {
-	teclat[key] = teclat[key] == IDLE ? PRESS : REPEAT;
-	
 	if (push[key])
 	{
 		specialKeys[key] = false;
@@ -96,8 +96,6 @@ void Game::specialKeyPressed(int key)
 
 void Game::specialKeyReleased(int key)
 {
-	teclat[key] = teclat[key] == REPEAT ? RELEASE : IDLE;
-
 	if (key == GLUT_KEY_UP) push[key] = false;
 	specialKeys[key] = false;
 }
@@ -130,8 +128,3 @@ int Game::getLevel() {
 int Game::hasChanged() {
 	return change;
 }
-
-
-
-
-

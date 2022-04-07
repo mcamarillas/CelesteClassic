@@ -26,6 +26,13 @@ Scene::~Scene()
 		delete player;
 }
 
+bool Scene::isdead() {
+	return player->getUnderground();
+}
+
+void Scene::respawn() {
+	player->respawn();
+}
 
 void Scene::init()
 {

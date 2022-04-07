@@ -23,6 +23,8 @@ public:
 	void update(int deltaTime);
 	void render();
 	void changeLevel(int level);
+	bool isdead();
+	void respawn();
 private:
 	void initShaders();
 

@@ -19,11 +19,14 @@ public:
     void render();
     void setTileMap(TileMap* tileMap);
     void setPosition(const glm::vec2& pos);
+    bool getUnderground();
+    void respawn();
 
 private:
     bool bJumping;
     bool isDashing;
     bool leftCol, rightCol, downCol, upCol;
+    bool underGround;
     glm::ivec2 tileMapDispl, posPlayer;
     int jumpAngle, dashAngle, startY, specialMove, dashX, dashY;
     Texture spritesheet;
