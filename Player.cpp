@@ -13,7 +13,7 @@
 #define DASH_ANGLE_STEP 4
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
-#define SPEEDX 3
+#define SPEEDX 4
 #define DASH_SPEED 6
 
 
@@ -143,8 +143,6 @@ void Player::leftJump() {
 
 void Player::updateJump()
 {
-		
-	
 	//UPDATE JUMP DISTANCE
 	jumpAngle += JUMP_ANGLE_STEP;
 	//IF JUMP ENDED REINITIALIZE VARIABLES (CREATE FUNCTION)
@@ -175,9 +173,19 @@ void Player::dash()
 	dashAngle += DASH_ANGLE_STEP;
 	if (dashX == 1) {
 		posPlayer.x -= DASH_SPEED;
+		bool lCol = map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32));
+		if (lCol) {
+			posPlayer.x += DASH_SPEED;
+			specialMove = 0;
+		}
 	}
 	else if (dashX == 2) {
 		posPlayer.x += DASH_SPEED;
+		bool rCol = map->collisionMoveRight(posPlayer, glm::ivec2(32, 32));
+		if (rCol) {
+			posPlayer.x -= DASH_SPEED;
+			specialMove = 0;
+		}
 	}
 	else {
 		
@@ -185,9 +193,15 @@ void Player::dash()
 
 	if (dashY == 1) {
 		posPlayer.y -= DASH_SPEED;
+		if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
+			specialMove = 0;
+		}
 	}
 	else if (dashY == 2) {
 		posPlayer.y += DASH_SPEED;
+		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
+			specialMove = 0;
+		}
 	}
 	else {
 
@@ -204,7 +218,6 @@ void Player::update(int deltaTime)
 	//LEFT MOVEMENT
 	if (Game::instance().getKey('x') && !isDashing)
 	{
-
 		if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 		{
 			dashY = 1;
@@ -221,6 +234,10 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 		{
 			dashX = 2;
+		}
+		else if(dashY == 0) {
+			if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT) dashX = 1;
+			else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT) dashX = 2;
 		}
 		else dashX = 0;
 		specialMove = 3;

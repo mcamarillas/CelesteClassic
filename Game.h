@@ -50,6 +50,8 @@ private:
 	Scene scene;                      // Scene to render
 	bool keys[256], specialKeys[256], push[256]; // Store key states so that 
 	                                  // we can have access at any time
+	enum {IDLE, PRESS, REPEAT, RELEASE};
+	int teclat[256];
 
 };
 
