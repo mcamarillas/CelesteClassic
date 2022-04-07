@@ -83,13 +83,13 @@ void Game::specialKeyPressed(int key)
 {
 	teclat[key] = teclat[key] == IDLE ? PRESS : REPEAT;
 	
-	if (key == GLUT_KEY_UP)
+	if (push[key])
 	{
-		if(teclat[key] == REPEAT) specialKeys[key] = false;
-		else specialKeys[key] = true;
+		specialKeys[key] = false;
 	}
 	else
 	{
+		if (key == GLUT_KEY_UP) push[key] = true;
 		specialKeys[key] = true;
 	}
 }
@@ -98,6 +98,7 @@ void Game::specialKeyReleased(int key)
 {
 	teclat[key] = teclat[key] == REPEAT ? RELEASE : IDLE;
 
+	if (key == GLUT_KEY_UP) push[key] = false;
 	specialKeys[key] = false;
 }
 
