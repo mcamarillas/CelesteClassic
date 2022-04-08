@@ -117,14 +117,16 @@ void Game::keyReleased(int key)
 
 void Game::specialKeyPressed(int key)
 {
-	if (push[key])
-	{
-		specialKeys[key] = false;
-	}
-	else
-	{
-		if (key == GLUT_KEY_UP) push[key] = true;
-		specialKeys[key] = true;
+	if (mode == GAME) {
+		if (push[key])
+		{
+			specialKeys[key] = false;
+		}
+		else
+		{
+			if (key == GLUT_KEY_UP) push[key] = true;
+			specialKeys[key] = true;
+		}
 	}
 }
 
