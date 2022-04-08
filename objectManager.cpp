@@ -3,8 +3,8 @@
 #include <GL/glut.h>
 #include "objectManager.h"
 
-void objectManager::createObject(int x, int y, Texture t, ShaderProgram& shaderProgram) {
-	Object *o = new Object(x, y, t, shaderProgram);
+void objectManager::createObject(int x, int y, string s, ShaderProgram& shaderProgram) {
+	Object *o = new Object(x, y, s, shaderProgram);
 	objects.push_back(o);
 }
 

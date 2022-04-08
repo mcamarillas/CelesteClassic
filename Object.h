@@ -9,7 +9,7 @@
 class Object
 {
 public:
-	Object(int x, int y, Texture t, ShaderProgram& shaderProgram);
+	Object(int x, int y, string s, ShaderProgram& shaderProgram);
 	glm::ivec2 getPosition();
 	void setPosition(int x, int y);
 	void update(int deltaTime);
@@ -17,6 +17,7 @@ public:
 	void setObject(int x, int y, Texture t, ShaderProgram& shaderProgram); 
 
 private:
+	Texture spritesheet;
 	Sprite* sprite;
 	glm::vec2 position;
 };

@@ -116,7 +116,8 @@ void Scene::changeLevel(int level) {
 	case 4:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level04.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		obj.createObject(100, 100, t, texProgram);
+		obj.createObject(100, 100, "images/Madeline.png", texProgram);
+		obj.createObject(200, 200, "images/Madeline.png", texProgram);
 		break;	
 	case 5:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 1) * map->getTileSize()));

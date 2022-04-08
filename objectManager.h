@@ -10,7 +10,7 @@ class objectManager
 	
 public:
 	void paintObjects(int deltaTime);
-	void createObject(int x, int y, Texture t, ShaderProgram& shaderProgram);
+	void createObject(int x, int y, string s, ShaderProgram& shaderProgram);
 	void deleteObjects();
 	void renderObjects();
 private:

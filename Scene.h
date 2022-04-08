@@ -7,6 +7,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "objectManager.h"
+#include "Player2.h"
 
 
 // Scene contains all the entities of our game.
@@ -36,7 +37,6 @@ private:
 	float currentTime;
 	glm::mat4 projection;
 	objectManager obj;
-
 };
 
 
