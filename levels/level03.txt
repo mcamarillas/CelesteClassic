@@ -1,8 +1,9 @@
 TILEMAP
-16 16						        -- Size of tile map in tiles
+16 19						        -- Size of tile map in tiles
 32 32							-- Tile size & block size
 images/SpriteSheetCeleste.png 	-- Tilesheet
 7 13
+0909090909091617        15090909
 0909090909091617        15090909
 091809090910              081809
 090909180917              150909
@@ -19,3 +20,5 @@ images/SpriteSheetCeleste.png 	-- Tilesheet
                 0810        0809
 020203    48    0810      480809
 091810    21    0810      010909
+                                
+                                
