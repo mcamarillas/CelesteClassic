@@ -38,9 +38,12 @@ int Object::getID() {
 bool Object::hasCollisioned(glm::vec2 playerPos) {
 	int playerTileX = playerPos.x / 32;
 	int playerTileY = playerPos.y / 32;
-	int objTileX = playerPos.x / 32;
-	int objTileY = playerPos.y / 32;
-	if (playerTileX == objTileX && playerTileY == objTileX) return true;
+	int playerTileX3 = (playerPos.x + 30) / 32;
+	
+	int objTileX = position.x / 32;
+	int objTileY = position.y / 32;
+	if ((playerTileX == objTileX && playerTileY == objTileY) || (playerTileX3 == objTileX && playerTileY == objTileY)) return true;
+
 	return false;
 }
 

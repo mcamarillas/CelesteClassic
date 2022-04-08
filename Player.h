@@ -23,6 +23,7 @@ public:
     void respawn();
     void resetLvl();
     bool getNextLvl();
+    glm::vec2 getPosition();
 
 private:
     bool bJumping;

@@ -15,6 +15,8 @@ public:
 	void deleteObjects();
 	void renderObjects();
 	void deleteObject(int id);
+	void checkCollisions(glm::vec2 posPlayer);
+
 private:
 	map<int,Object*> objects;
 

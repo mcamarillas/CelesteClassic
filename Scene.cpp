@@ -59,6 +59,7 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	obj.paintObjects(deltaTime);
 	player->update(deltaTime);
+	obj.checkCollisions(player->getPosition());
 }
 
 void Scene::render()
@@ -124,7 +125,7 @@ void Scene::changeLevel(int level) {
 	case 4:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level04.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		obj.createObject(1, glm::vec2(5, 5), "images/fresita.png", glm::vec2(1, 1), texProgram);
+		obj.createObject(1, glm::vec2(2, 10), "images/fresita.png", glm::vec2(1, 1), texProgram);
 		break;
 	case 5:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 1) * map->getTileSize()));

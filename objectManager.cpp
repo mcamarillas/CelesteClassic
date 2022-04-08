@@ -27,3 +27,10 @@ void objectManager::deleteObject(int id) {
 	objects.erase(id);
 }
 
+void objectManager::checkCollisions(glm::vec2 posPlayer) {
+	for (std::map<int, Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
+		if (it->second->hasCollisioned(posPlayer)) objects.erase(it);
+		break;
+	}
+}
+
