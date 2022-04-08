@@ -7,7 +7,8 @@
 
 using namespace std;
 
-vector<int> nonCollisionableBlock = {0, 4, 5, 6, 7, 24, 31};
+vector<int> nonCollisionableBlock = { 0, 4, 5, 6, 7, 24, 31, 85, 86, 87};
+vector<int> spikesV = {7, 85, 86, 87};
 
 TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
 {
@@ -217,13 +218,13 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 
 			
 		}
-		if (map[(y - 1) * mapSize.x + x] == 7) spikes = true;
+		if (count(spikesV.begin(), spikesV.end(), map[(y-1) * mapSize.x + x])) spikes = true;
 	}
 
 	return result;
 }
 
-bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) 
 {
 	int x0, x1, y,r;
 
@@ -242,6 +243,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 				*posY = tileSize * y - size.y;
 				return true;
 			}
+			
 		}
 	}
 

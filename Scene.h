@@ -7,7 +7,6 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "objectManager.h"
-#include "Player2.h"
 
 
 // Scene contains all the entities of our game.
@@ -33,8 +32,8 @@ private:
 	void initShaders();
 
 private:
-	TileMap *map;
-	Player *player;
+	TileMap* map;
+	Player* player;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
@@ -43,4 +42,3 @@ private:
 
 
 #endif // _SCENE_INCLUDE
-

@@ -29,6 +29,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	specialMove = 0;
 	isDashing = false;
 	underGround = false;
+	nextLvl = false;
 	//checkCollisions();
 	spritesheet.loadFromFile("images/Madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
@@ -173,12 +174,20 @@ bool Player::getUnderground() {
 	return underGround;
 }
 
+bool Player::getNextLvl() {
+	return nextLvl;
+}
+
 void Player::respawn() {
 	underGround = false;
 	specialMove = 0;
 	bJumping = 0;
 	jumpAngle = 0;
 	map->respawn();
+}
+
+void Player::resetLvl() {
+	nextLvl = false;
 }
 
 void Player::dash()
@@ -208,6 +217,7 @@ void Player::dash()
 		posPlayer.y -= DASH_SPEED;
 		if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
 			specialMove = 0;
+			posPlayer.y += 2*DASH_SPEED;
 		}
 	}
 	else if (dashY == 2) {
@@ -227,7 +237,10 @@ void Player::dash()
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	if (posPlayer.y >= 512 || (map->getSpikes())) underGround = true;
+	if (posPlayer.y <= 1) {
+		nextLvl = true;
+	}
+	else if (posPlayer.y >= 512 || (map->getSpikes())) underGround = true;
 	else {		
 
 		checkCollisions();
@@ -330,7 +343,7 @@ void Player::update(int deltaTime)
 			posPlayer.y += FALL_STEP;
 			if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
 
-				if (Game::instance().getSpecialKey(GLUT_KEY_UP) && rightCol && !upCol) rightJump();
+				if (Game::instance().getSpecialKey(GLUT_KEY_UP) && rightCol && !upCol ) rightJump();
 				else if (Game::instance().getSpecialKey(GLUT_KEY_UP) && leftCol && !upCol) leftJump();
 			}
 			// CUANDO ESTAS EN EL SUELO

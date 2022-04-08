@@ -1,5 +1,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include <Windows.h>
+#include <cstdlib>
 #include "Game.h"
 
 
@@ -13,10 +15,17 @@ void Game::init()
 bool Game::update(int deltaTime)
 {
 
+
 	scene.update(deltaTime);
-	if (change || scene.isdead()) {
+	if (scene.nextLvl()) {
+		level = level + 1;
+		scene.changeLevel(level);
+		scene.resetLvl();
+	}
+	else if (change || scene.isdead()) {
 		scene.changeLevel(level);
 		change = false;
+		scene.resetLvl();
 		scene.respawn();
 	}
 	return bPlay;
