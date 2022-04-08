@@ -27,6 +27,8 @@ public:
 	void changeLevel(int level);
 	bool isdead();
 	void respawn();
+	bool nextLvl();
+	void resetLvl();
 private:
 	void initShaders();
 

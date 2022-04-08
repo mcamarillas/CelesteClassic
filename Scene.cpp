@@ -30,8 +30,16 @@ bool Scene::isdead() {
 	return player->getUnderground();
 }
 
+bool Scene::nextLvl() {
+	return player->getNextLvl();
+}
+
 void Scene::respawn() {
 	player->respawn();
+}
+
+void Scene::resetLvl() {
+	player->resetLvl();
 }
 
 void Scene::init()
