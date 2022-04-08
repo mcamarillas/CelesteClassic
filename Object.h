@@ -9,14 +9,16 @@
 class Object
 {
 public:
-	Object(int x, int y, string s, ShaderProgram& shaderProgram);
-	glm::ivec2 getPosition();
-	void setPosition(int x, int y);
+	Object(int id, glm::vec2 position, string s, glm::vec2 d, ShaderProgram& shaderProgram);
+	glm::vec2 getPosition();
+	void setPosition(glm::vec2 position);
 	void update(int deltaTime);
 	void render();
-	void setObject(int x, int y, Texture t, ShaderProgram& shaderProgram); 
+	int getID();
+	bool hasCollisioned(glm::vec2 playerPos);
 
 private:
+	int id;
 	Texture spritesheet;
 	Sprite* sprite;
 	glm::vec2 position;
