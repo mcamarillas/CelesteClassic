@@ -29,8 +29,8 @@ private:
     bool bJumping;
     bool isDashing;
     bool leftCol, rightCol, downCol, upCol;
-    bool underGround;
-    bool nextLvl;
+    bool underGround = false;
+    bool nextLvl = false;
     glm::ivec2 tileMapDispl, posPlayer;
     int jumpAngle, dashAngle, startY, specialMove, dashX, dashY;
     Texture spritesheet;

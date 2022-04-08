@@ -50,7 +50,7 @@ private:
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
 	int *map;
-	bool spikes;
+	bool spikes = false;
 
 };
 

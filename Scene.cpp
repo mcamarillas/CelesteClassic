@@ -48,7 +48,7 @@ void Scene::init()
 	map = TileMap::createTileMap("levels/startScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(-100, -100));
+	player->setPosition(glm::vec2(100,100));
 	player->setTileMap(map);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -155,3 +155,14 @@ void Scene::changeLevel(int level) {
 	player->setTileMap(map);
 }
 
+void Scene::changeInstrucctions() {
+		map = TileMap::createTileMap("levels/pauseScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+}
+
+void Scene::changeCredits() {
+	map = TileMap::createTileMap("levels/creditsScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+}
+
+void Scene::changeMainMenu() {
+	map = TileMap::createTileMap("levels/startScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+}

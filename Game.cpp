@@ -14,8 +14,6 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
-
-
 	scene.update(deltaTime);
 	if (scene.nextLvl()) {
 		level = level + 1;
@@ -44,42 +42,69 @@ void Game::keyPressed(int key)
 	else if (key == '1') {
 		level = 1;
 		change = true;
+		mode = GAME;
 	}
 	else if (key == '2') {
 		level = 2;
 		change = true;
+		mode = GAME;
 	}
 	else if (key == '3') {
 		level = 3;
 		change = true;
+		mode = GAME;
 	}
 	else if (key == '4') {
 		level = 4;
 		change = true;
+		mode = GAME;
 	}
 	else if (key == '5') {
 		level = 5;
 		change = true;
+		mode = GAME;
 	}
 	else if (key == '6') {
 		level = 6;
 		change = true;
+		mode = GAME;
 	}
 	else if (key == '7') {
 		level = 7;
 		change = true;
+		mode = GAME;
 	}
 	else if (key == '8') {
 		level = 8;
 		change = true;
+		mode = GAME;
 	}
 	else if (key == '9') {
 		level = 9;
 		change = true;
+		mode = GAME;
 	}
 	else if (key == '0') {
 		level = 10;
 		change = true;
+		mode = GAME;
+	}
+	else if (key == 'i' && mode == MENU) {
+		scene.changeInstrucctions();
+		mode = INSTRUCTIONS;
+	}
+	else if (key == 'c' && mode == MENU) {
+		scene.changeCredits();
+		mode = CREDITS;
+	}
+	else if (key == 'q' && (mode == INSTRUCTIONS || mode == CREDITS)) {
+		scene.changeMainMenu();
+			mode = MENU;
+	}
+	else if (key == 'p' && mode == MENU) {
+		level = 1;
+		change = true;
+		mode = GAME;
 	}
 	keys[key] = true;
 }

@@ -28,6 +28,11 @@ public:
 	void respawn();
 	bool nextLvl();
 	void resetLvl();
+	void changeInstrucctions();
+	void changeCredits();
+	void changeMainMenu();
+
+
 private:
 	void initShaders();
 

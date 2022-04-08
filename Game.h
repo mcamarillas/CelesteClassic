@@ -11,6 +11,7 @@
 
 // Game is a singleton (a class with a single instance) that represents our whole application
 
+enum Mode { MENU, INSTRUCTIONS, GAME, CREDITS };
 
 class Game
 {
@@ -44,13 +45,14 @@ public:
 	bool getSpecialKey(int key) const;
 
 private:
-	int level = 1;
+	int level = 0;
 	bool change = false;
 	bool bPlay;                       // Continue to play game?
 	Scene scene;                      // Scene to render
 	bool keys[256], specialKeys[256], push[256]; // Store key states so that 
 	                                  // we can have access at any time
 	enum {IDLE, PRESS, REPEAT, RELEASE};
+	Mode mode = MENU;
 	int teclat[256];
 
 };
