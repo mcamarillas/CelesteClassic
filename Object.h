@@ -4,6 +4,8 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include <glm/glm.hpp>
+#include <irrKlang.h>
+using namespace irrklang;
 
 #pragma 
 class Object
@@ -22,6 +24,7 @@ private:
 	Texture spritesheet;
 	Sprite* sprite;
 	glm::vec2 position;
+	ISoundEngine* goalEffects = createIrrKlangDevice();
 };
 
 #endif 

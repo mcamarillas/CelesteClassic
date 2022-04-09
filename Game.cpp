@@ -8,6 +8,7 @@
 void Game::init()
 {
 	bPlay = true;
+	soundTrack->play2D("sound/st1.wav", false);
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	scene.init();
 }
@@ -16,7 +17,8 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
-	
+
+		
 	
 	if (scene.nextLvl()) {
 		scene.resetLvl();

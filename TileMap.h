@@ -29,6 +29,8 @@ public:
 	void free();
 	int getTileSize() const { return tileSize; }
 	bool getSpikes();
+	bool getMolla();
+	void noMolla();
 	void respawn();
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
@@ -51,6 +53,7 @@ private:
 	glm::vec2 tileTexSize;
 	int *map;
 	bool spikes = false;
+	bool molla = false;
 
 };
 

@@ -192,8 +192,17 @@ bool TileMap::getSpikes() {
 	return spikes;
 }
 
+bool TileMap::getMolla() {
+	return molla;
+}
+
+
 void TileMap::respawn() {
 	spikes = false;
+}
+
+void TileMap::noMolla() {
+	molla = false;
 }
 
 
@@ -219,6 +228,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 			
 		}
 		if (count(spikesV.begin(), spikesV.end(), map[(y-1) * mapSize.x + x])) spikes = true;
+		if (48 ==  map[(y) * mapSize.x + x]) molla = true;
 	}
 
 	return result;

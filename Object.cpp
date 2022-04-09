@@ -42,7 +42,11 @@ bool Object::hasCollisioned(glm::vec2 playerPos) {
 	
 	int objTileX = position.x / 32;
 	int objTileY = position.y / 32;
-	if ((playerTileX == objTileX && playerTileY == objTileY) || (playerTileX3 == objTileX && playerTileY == objTileY)) return true;
+	if ((playerTileX == objTileX && playerTileY == objTileY) || (playerTileX3 == objTileX && playerTileY == objTileY)) {
+		goalEffects->play2D("sound/strawBerry.wav", false);
+		return true;
+
+	}
 
 	return false;
 }

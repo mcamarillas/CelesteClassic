@@ -8,7 +8,6 @@
 class Background
 {
 public:
-	Background();
 	void init(string s, glm::vec2 position, glm::vec2 dimension,int speed, ShaderProgram& shaderProgram);
 	void updateX();
 	void updateYSnow();

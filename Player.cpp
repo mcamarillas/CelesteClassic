@@ -2,8 +2,6 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/glut.h>
-#include <Windows.h>
-#include "MMSystem.h"
 #include "Game.h"
 #include "Player.h"
 #include "Game.h"
@@ -32,6 +30,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	isDashing = false;
 	underGround = false;
 	nextLvl = false;
+	isMolla = false;
 	//checkCollisions();
 	spritesheet.loadFromFile("images/Madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
@@ -122,7 +121,8 @@ void Player::checkCollisions() {
 }
 
 void Player::rightJump() {
-		//PlaySound(TEXT("Suu"), NULL, SND_FILENAME | SND_ASYNC);
+
+	    movementEffectsR->play2D("sound/jump.wav", false);
 		specialMove = 1;
 		if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT)
 			sprite->changeAnimation(JUMP_LEFT);
@@ -134,7 +134,7 @@ void Player::rightJump() {
 }
 
 void Player::leftJump() {
-	//PlaySound(TEXT("Suu"), NULL, SND_FILENAME | SND_ASYNC);
+	movementEffectsL->play2D("sound/jump.wav", false);
 	specialMove = 2;
 	if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT)
 		sprite->changeAnimation(JUMP_LEFT);
@@ -150,24 +150,27 @@ void Player::updateJump()
 	//UPDATE JUMP DISTANCE
 	jumpAngle += JUMP_ANGLE_STEP;
 	//IF JUMP ENDED REINITIALIZE VARIABLES (CREATE FUNCTION)
-	if (jumpAngle == 180)
-	{
-		bJumping = false;
-		posPlayer.y = startY;
-	}
-	else if (jumpAngle >= 90) {
-		specialMove = 0;		
-	}
-	//ACTIVATE SPECIAL LEFT JUMP
-	posPlayer.x += SPEEDX;
-	bool rCol = map->collisionMoveRight(posPlayer, glm::ivec2(32, 32));
-	posPlayer.x -= SPEEDX;
-	posPlayer.x -= SPEEDX;
-	bool lCol = map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32));
-	posPlayer.x += SPEEDX;
-	if (Game::instance().getSpecialKey(GLUT_KEY_UP) && rCol && jumpAngle > 32) rightJump();
-	//ACTIVATE SPECIAL RIGHT JUMP	
-	else if (Game::instance().getSpecialKey(GLUT_KEY_UP) && lCol && jumpAngle > 32) leftJump();
+		if (jumpAngle >= 180)
+		{
+			bJumping = false;
+			isMolla = false;
+			posPlayer.y = startY;
+		}
+		else if (jumpAngle >= 90) {
+			specialMove = 0;
+		}
+
+		//ACTIVATE SPECIAL LEFT JUMP
+		posPlayer.x += SPEEDX;
+		bool rCol = map->collisionMoveRight(posPlayer, glm::ivec2(32, 32));
+		posPlayer.x -= SPEEDX;
+		posPlayer.x -= SPEEDX;
+		bool lCol = map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32));
+		posPlayer.x += SPEEDX;
+		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && rCol && jumpAngle > 32) rightJump();
+		//ACTIVATE SPECIAL RIGHT JUMP	
+		else if (Game::instance().getSpecialKey(GLUT_KEY_UP) && lCol && jumpAngle > 32) leftJump();
+	
 	
 	
 }
@@ -244,14 +247,20 @@ void Player::update(int deltaTime)
 		posPlayer.y = 700;
 		bJumping = false;
 		specialMove = 0;
+		goalEffects->play2D("sound/nextlvl.wav", false);
 	}
-	else if (posPlayer.y >= 512 || (map->getSpikes())) underGround = true;
+	else if (posPlayer.y >= 512 || (map->getSpikes())) {		
+		if(map->getSpikes()) collisionEffects->play2D("sound/spikes.wav", false);
+		else collisionEffects->play2D("sound/respawn.wav", false);
+		underGround = true;
+	}
 	else {		
 
 		checkCollisions();
 		//LEFT MOVEMENT
 		if (Game::instance().getKey('x') && !isDashing)
 		{
+			movementEffects->play2D("sound/dash.wav", false);
 			if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
 				dashY = 1;
@@ -332,12 +341,17 @@ void Player::update(int deltaTime)
 		//TRATAR EL SALTO ACTIVO
 		if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &py) && bJumping) {
 			bJumping = false;
+			isMolla = false;
 			specialMove = 0;
 		}
-		else if (bJumping)posPlayer.y = py;
+		else if (bJumping) {
+			if (isMolla) py = int(startY - 128 * sin(3.14159 * jumpAngle / 180.f));
+			posPlayer.y = py;
+		}
 		// CUANDO ESTAS CAYENDO		
 		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
 			bJumping = false;
+			isMolla = false;
 			specialMove = 0;
 		}
 		if (bJumping) updateJump();
@@ -347,12 +361,23 @@ void Player::update(int deltaTime)
 			// CUANDO ESTAS CAYENDO
 			posPlayer.y += FALL_STEP;
 			if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
-
-				if (Game::instance().getSpecialKey(GLUT_KEY_UP) && rightCol && !upCol ) rightJump();
-				else if (Game::instance().getSpecialKey(GLUT_KEY_UP) && leftCol && !upCol) leftJump();
+				
+				if (Game::instance().getSpecialKey(GLUT_KEY_UP) && rightCol && !upCol) {
+					rightJump();
+				}
+				else if (Game::instance().getSpecialKey(GLUT_KEY_UP) && leftCol && !upCol) {
+					leftJump();
+				}
 			}
 			// CUANDO ESTAS EN EL SUELO
 			else {
+				if (map->getMolla()) {
+					isMolla = true;
+					bJumping = true;
+					jumpAngle = 0;
+					startY = posPlayer.y;
+					map->noMolla();
+				}
 				isDashing = false;
 				posPlayer.x -= SPEEDX;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
@@ -368,7 +393,7 @@ void Player::update(int deltaTime)
 				}
 				if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 				{
-					//PlaySound(TEXT("Suu"), NULL, SND_FILENAME | SND_ASYNC);
+					movementEffects->play2D("sound/jump.wav", false);
 					if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT)
 						sprite->changeAnimation(JUMP_LEFT);
 					else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT)

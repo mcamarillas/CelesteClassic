@@ -3,6 +3,8 @@
 
 
 #include "Scene.h"
+#include <irrKlang.h>
+using namespace irrklang;
 
 
 #define SCREEN_WIDTH 512
@@ -52,7 +54,7 @@ private:
 	bool keys[256], specialKeys[256], push[256]; // Store key states so that 
 	                                  // we can have access at any time
 	enum {IDLE, PRESS, REPEAT, RELEASE};
-	
+	ISoundEngine* soundTrack = createIrrKlangDevice();
 	Mode mode = MENU;
 	int teclat[256];
 

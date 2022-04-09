@@ -16,3 +16,4 @@ private:
 	map<int, Background*> snows;
 };
 
+

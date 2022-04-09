@@ -4,6 +4,8 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include <irrKlang.h>
+using namespace irrklang;
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -36,14 +38,20 @@ private:
     Texture spritesheet;
     Sprite* sprite;
     TileMap* map;
-
+    ISoundEngine* collisionEffects = createIrrKlangDevice();
+    ISoundEngine* movementEffects = createIrrKlangDevice();
+    ISoundEngine* movementEffectsL = createIrrKlangDevice();
+    ISoundEngine* movementEffectsR = createIrrKlangDevice();
+    ISoundEngine* goalEffects = createIrrKlangDevice();
     void moveLeft();
     void moveRight();
     void updateJump();
-    void dash();
+    void dash(); 
     void checkCollisions();
 	void rightJump();
 	void leftJump();
+    void mollaJump();
+    bool isMolla;
 
 
 };
