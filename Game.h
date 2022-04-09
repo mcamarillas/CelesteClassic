@@ -11,6 +11,7 @@
 
 // Game is a singleton (a class with a single instance) that represents our whole application
 
+
 enum Mode { MENU, INSTRUCTIONS, GAME, CREDITS };
 
 class Game
@@ -52,6 +53,7 @@ private:
 	bool keys[256], specialKeys[256], push[256]; // Store key states so that 
 	                                  // we can have access at any time
 	enum {IDLE, PRESS, REPEAT, RELEASE};
+	
 	Mode mode = MENU;
 	int teclat[256];
 

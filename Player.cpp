@@ -376,7 +376,7 @@ void Player::update(int deltaTime)
 			}
 		}
 	}	
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	sprite->setPosition(glm::vec2(float(2 * tileMapDispl.x + posPlayer.x), float(2*tileMapDispl.y + posPlayer.y)));
 }
 
 void Player::render()

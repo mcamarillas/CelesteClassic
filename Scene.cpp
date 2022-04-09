@@ -5,8 +5,8 @@
 #include "Game.h"
 
 
-#define SCREEN_X 0
-#define SCREEN_Y -32
+#define SCREEN_X -32
+#define SCREEN_Y -64
 
 #define INIT_PLAYER_X_TILES 0
 #define INIT_PLAYER_Y_TILES 12
@@ -44,22 +44,26 @@ void Scene::resetLvl() {
 
 void Scene::init()
 {
+	
 	initShaders();
 	map = TileMap::createTileMap("levels/startScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(300, 100));
 	player->setTileMap(map);
+	background->init(glm::vec2(1,1),texProgram);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
 
 void Scene::update(int deltaTime)
 {
+	
 	currentTime += deltaTime;
 	obj.paintObjects(deltaTime);
 	player->update(deltaTime);
 	obj.checkCollisions(player->getPosition());
+	background->update(deltaTime);
 }
 
 void Scene::render()
@@ -72,9 +76,13 @@ void Scene::render()
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+
+	background->render();
 	map->render();
+	
 	player->render();
 	obj.renderObjects();
+	
 }
 
 void Scene::initShaders()
