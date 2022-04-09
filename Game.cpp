@@ -12,21 +12,23 @@ void Game::init()
 	scene.init();
 }
 
+
+
 bool Game::update(int deltaTime)
 {
-	scene.update(deltaTime);
+	
 	
 	if (scene.nextLvl()) {
-		level = level + 1;
-		scene.changeLevel(level);
 		scene.resetLvl();
+		scene.changeLevel(level+1);
 	}
 	else if (change || scene.isdead()) {
 		scene.changeLevel(level);
 		change = false;
-		scene.resetLvl();
 		scene.respawn();
 	}
+	scene.update(deltaTime);
+	level = scene.getLvl();
 	return bPlay;
 }
 
@@ -159,9 +161,7 @@ bool Game::getSpecialKey(int key) const
 	return specialKeys[key];
 }
 
-int Game::getLevel() {
-	return level;
-}
+
 int Game::hasChanged() {
 	return change;
 }

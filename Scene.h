@@ -24,6 +24,7 @@ public:
 	void update(int deltaTime);
 	void render();
 	void changeLevel(int level);
+	int getLvl();
 	bool isdead();
 	void respawn();
 	bool nextLvl();
@@ -43,6 +44,7 @@ private:
 	float currentTime;
 	glm::mat4 projection;
 	objectManager obj;
+	int lvl;
 	Background *background = new Background();
 };
 
