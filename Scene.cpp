@@ -5,8 +5,8 @@
 #include "Game.h"
 
 
-#define SCREEN_X -32
-#define SCREEN_Y -64
+#define SCREEN_X 0
+#define SCREEN_Y -32
 
 #define INIT_PLAYER_X_TILES 0
 #define INIT_PLAYER_Y_TILES 12
@@ -52,7 +52,7 @@ void Scene::init()
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(300, 100));
 	player->setTileMap(map);
-	background->init(glm::vec2(1,1),texProgram);
+	background.init(texProgram);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -64,7 +64,7 @@ void Scene::update(int deltaTime)
 	obj.paintObjects(deltaTime);
 	player->update(deltaTime);
 	obj.checkCollisions(player->getPosition());
-	background->update(deltaTime);
+	background.updateBackground(deltaTime);
 }
 
 void Scene::render()
@@ -78,12 +78,16 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-	background->render();
+	background.renderBackground();
+
+	modelview = glm::mat4(1.0f);
+	texProgram.setUniformMatrix4f("modelview", modelview);
+
 	map->render();
 	
 	player->render();
 	obj.renderObjects();
-	
+	background.renderSnow();
 }
 
 int Scene::getLvl() {
@@ -116,6 +120,19 @@ void Scene::initShaders()
 		cout << "" << texProgram.log() << endl << endl;
 	}
 	texProgram.bindFragmentOutput("outColor");
+	vShader.free();
+	fShader.free();
+
+	texProgram2.init();
+	texProgram2.addShader(vShader);
+	texProgram2.addShader(fShader);
+	texProgram2.link();
+	if (!texProgram2.isLinked())
+	{
+		cout << "Shader Linking Error" << endl;
+		cout << "" << texProgram2.log() << endl << endl;
+	}
+	texProgram2.bindFragmentOutput("outColor");
 	vShader.free();
 	fShader.free();
 }

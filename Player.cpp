@@ -16,6 +16,8 @@
 #define SPEEDX 4
 #define DASH_SPEED 6
 
+#define OFFSETX 0
+#define OFFSETY 0
 
 enum PlayerAnims
 {
@@ -379,7 +381,7 @@ void Player::update(int deltaTime)
 			}
 		}
 	}	
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x +32), float(tileMapDispl.y + posPlayer.y+32)));
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x + OFFSETX), float(tileMapDispl.y + posPlayer.y + OFFSETY)));
 }
 
 void Player::render()

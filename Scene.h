@@ -7,7 +7,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "objectManager.h"
-#include "Background.h"
+#include "backgroundManager.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -40,12 +40,12 @@ private:
 private:
 	TileMap* map;
 	Player* player;
-	ShaderProgram texProgram;
+	ShaderProgram texProgram, texProgram2;
 	float currentTime;
 	glm::mat4 projection;
 	objectManager obj;
 	int lvl;
-	Background *background = new Background();
+	backgroundManager background;
 };
 
 
