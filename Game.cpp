@@ -102,7 +102,7 @@ void Game::keyPressed(int key)
 		scene.changeCredits();
 		mode = CREDITS;
 	}
-	else if (key == 'q' && (mode == INSTRUCTIONS || mode == CREDITS)) {
+	else if (key == 'q') {
 		scene.changeMainMenu();
 			mode = MENU;
 	}
