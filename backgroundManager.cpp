@@ -3,6 +3,7 @@
 void backgroundManager::init(ShaderProgram& shaderProgram) {
 	srand(time(NULL));
 	
+	shader = shaderProgram;
 
 	for (int i = 0; i < 15; ++i) {
 		int x1 = (rand() % 30) -30;
@@ -26,6 +27,12 @@ void backgroundManager::init(ShaderProgram& shaderProgram) {
 		b->setA(A);
 		b->setW(w);
 		snows[i] = b;
+	}
+}
+
+void backgroundManager::setCloudColor(string s) {
+	for (std::map<int, Background*>::iterator it = backgrounds.begin(); it != backgrounds.end(); ++it) {
+		it->second->changeColor(s);
 	}
 }
 
@@ -53,3 +60,4 @@ void backgroundManager::renderSnow() {
 		it->second->render();
 	}
 }
+

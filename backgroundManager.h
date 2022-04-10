@@ -10,8 +10,10 @@ public:
 	void renderBackground();
 	void renderSnow();
 	void init(ShaderProgram& shaderProgram);
+	void setCloudColor(string s);
 
 private:
+	ShaderProgram shader;
 	map<int, Background*> backgrounds;
 	map<int, Background*> snows;
 };

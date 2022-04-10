@@ -7,6 +7,8 @@ void Background::init(string s, glm::vec2 position, glm::vec2 dimension,int spee
 	this->position.y = position.y * 32;
 	this->speed = speed;
 	y = position.y;
+	this->dimension = dimension;
+	shader = shaderProgram;
 	spritesheet.loadFromFile(s, TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(dimension, glm::vec2(1, 1), &spritesheet, &shaderProgram);
 	sprite->setPosition(position);
@@ -36,4 +38,9 @@ void Background::setA(int A) {
 
 void Background::setW(float w) {
 	this->w = w;
+}
+
+void Background::changeColor(string s) {
+	spritesheet.loadFromFile(s, TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(dimension, glm::vec2(1, 1), &spritesheet, &shader);
 }

@@ -46,51 +46,67 @@ void Game::keyPressed(int key)
 		bPlay = false;
 	else if (key == '1') {
 		level = 1;
+		prevLvl = 1;
 		change = true;
 		mode = GAME;
 	}
 	else if (key == '2') {
 		level = 2;
+		prevLvl = 2;
 		change = true;
 		mode = GAME;
 	}
 	else if (key == '3') {
 		level = 3;
+		prevLvl = 3;
 		change = true;
 		mode = GAME;
 	}
 	else if (key == '4') {
 		level = 4;
+		prevLvl = 4;
 		change = true;
 		mode = GAME;
 	}
 	else if (key == '5') {
 		level = 5;
+		prevLvl = 5;
 		change = true;
 		mode = GAME;
 	}
 	else if (key == '6') {
 		level = 6;
+		prevLvl = 6;
 		change = true;
 		mode = GAME;
 	}
 	else if (key == '7') {
 		level = 7;
+		prevLvl = 7;
 		change = true;
 		mode = GAME;
 	}
 	else if (key == '8') {
 		level = 8;
+		prevLvl = 8;
 		change = true;
 		mode = GAME;
 	}
 	else if (key == '9') {
 		level = 9;
+		prevLvl = 9;
 		change = true;
 		mode = GAME;
 	}
 	else if (key == '0') {
 		level = 10;
+		prevLvl = 10;
+		change = true;
+		mode = GAME;
+	}
+	else if (key == 'f') {
+		level = 11;
+		prevLvl = 11;
 		change = true;
 		mode = GAME;
 	}
@@ -107,7 +123,7 @@ void Game::keyPressed(int key)
 			mode = MENU;
 	}
 	else if (key == 'p' && mode == MENU) {
-		level = 1;
+		level = prevLvl;
 		change = true;
 		mode = GAME;
 	}

@@ -199,6 +199,12 @@ void Scene::changeLevel(int level) {
 		map = TileMap::createTileMap("levels/level10.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
 		break;
+	case 11:
+		background.setCloudColor("images/españa.png");
+		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
+		map = TileMap::createTileMap("levels/final.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		lvl = level;
+		break;
 	}
 	player->setTileMap(map);
 }
@@ -212,5 +218,6 @@ void Scene::changeCredits() {
 }
 
 void Scene::changeMainMenu() {
+	obj.deleteObjects();
 	map = TileMap::createTileMap("levels/startScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 }

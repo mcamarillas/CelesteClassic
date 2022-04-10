@@ -48,6 +48,7 @@ public:
 
 private:
 	int level = 0;
+	int prevLvl = 1;
 	bool change = false;
 	bool bPlay;                       // Continue to play game?
 	Scene scene;                      // Scene to render
