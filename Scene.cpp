@@ -200,7 +200,8 @@ void Scene::changeLevel(int level) {
 		lvl = level;
 		break;
 	case 11:
-		background.setCloudColor("images/españa.png");
+		glClearColor(0.5254f, 0.1882f, 0.3294f, 1.0f);
+		background.setCloudColor("images/rosita.png");
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/final.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
