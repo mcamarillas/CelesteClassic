@@ -16,9 +16,12 @@ public:
 	void renderObjects();
 	void deleteObject(int id);
 	void checkCollisions(glm::vec2 posPlayer);
+	bool isOpen();
+	void setOpen(bool o);
 
 private:
 	map<int,Object*> objects;
+	bool open = false;
 
 };
 

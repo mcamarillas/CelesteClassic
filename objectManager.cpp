@@ -29,8 +29,21 @@ void objectManager::deleteObject(int id) {
 
 void objectManager::checkCollisions(glm::vec2 posPlayer) {
 	for (std::map<int, Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
-		if (it->second->hasCollisioned(posPlayer)) objects.erase(it);
-		break;
+		if (it->second->hasCollisioned(posPlayer)) {
+			if (it->second->getType() == 1) open = true;
+			objects.erase(it);
+			break;
+		}
 	}
 }
+
+bool objectManager::isOpen()
+{
+	return open;
+}
+
+void objectManager::setOpen(bool o) {
+	open = o;
+}
+
 

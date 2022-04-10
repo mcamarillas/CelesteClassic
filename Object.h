@@ -20,10 +20,14 @@ public:
 	void render();
 	int getID();
 	bool hasCollisioned(glm::vec2 playerPos);
+	int getType();
 
 private:
 	int type; // 0 -> POINTABLE , 1 -> KEYS 2 -> BALLON
 	int id;
+	float angle = 0;
+	int anim = 0;
+	bool open = false;
 	Texture spritesheet;
 	Sprite* sprite;
 	glm::vec2 position;

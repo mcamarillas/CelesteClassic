@@ -268,15 +268,25 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	return false;
 }
 
+glm::vec2 TileMap::openCofre() {
+	for (int j = 0; j < mapSize.y; j++) {
+		for (int i = 0; i < mapSize.x; i++) {
+			if (map[j * mapSize.x + i] == 74) {
+				map[j * mapSize.x + i] = 0;
+				prepareArrays(mPos, texProgram);
+				return glm::vec2(i, j - 2);
+			}
+		}
+	}
+}
+
 void TileMap::update() {
 	if (updateMap == true) countt++;
 	if (updateMap == true && countt == 10) {
 		countt = 0;
 		updateMap = false;
-		for (int j = 0; j < mapSize.y; j++)
-		{
-			for (int i = 0; i < mapSize.x; i++)
-			{
+		for (int j = 0; j < mapSize.y; j++) {
+			for (int i = 0; i < mapSize.x; i++) {
 				if (map[j * mapSize.x + i] == 49) {
 					map[j * mapSize.x + i] = 48;
 					prepareArrays(mPos, texProgram);
