@@ -68,7 +68,8 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Player::moveLeft()
 {
-	posPlayer -= SPEEDX;
+	if (posPlayer.x - SPEEDX >= 0)posPlayer.x -= SPEEDX;
+	else posPlayer.x = 0;
 	if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 	{
 		posPlayer += SPEEDX;
@@ -83,7 +84,8 @@ void Player::moveLeft()
 }
 void Player::moveRight()
 {
-	posPlayer += SPEEDX;
+	if (posPlayer.x + SPEEDX <= 480)posPlayer.x += SPEEDX;
+	else posPlayer.x = 480;
 	if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 	{
 		posPlayer -= SPEEDX;
@@ -199,7 +201,8 @@ void Player::dash()
 {
 	dashAngle += DASH_ANGLE_STEP;
 	if (dashX == 1) {
-		posPlayer.x -= DASH_SPEED;
+		if (posPlayer.x - DASH_SPEED >= 0)posPlayer.x -= DASH_SPEED;
+		else posPlayer.x = 0;
 		bool lCol = map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32));
 		if (lCol) {
 			posPlayer.x += DASH_SPEED;
@@ -207,7 +210,8 @@ void Player::dash()
 		}
 	}
 	else if (dashX == 2) {
-		posPlayer.x += DASH_SPEED;
+		if (posPlayer.x + DASH_SPEED <= 480)posPlayer.x += DASH_SPEED;
+		else posPlayer.x = 480;
 		bool rCol = map->collisionMoveRight(posPlayer, glm::ivec2(32, 32));
 		if (rCol) {
 			posPlayer.x -= DASH_SPEED;
@@ -249,7 +253,7 @@ void Player::update(int deltaTime)
 		specialMove = 0;
 		goalEffects->play2D("sound/nextlvl.wav", false);
 	}
-	else if (posPlayer.y >= 512 || (map->getSpikes())) {		
+	else if (posPlayer.y >= 512 || posPlayer.x > (32*16 + 25) ||(map->getSpikes())) {		
 		if(map->getSpikes()) collisionEffects->play2D("sound/spikes.wav", false);
 		else collisionEffects->play2D("sound/respawn.wav", false);
 		underGround = true;
@@ -308,7 +312,7 @@ void Player::update(int deltaTime)
 
 
 			//LEFT MOVEMENT
-			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && posPlayer.x >= 0)
 			{
 				if (sprite->animation() != MOVE_LEFT) sprite->changeAnimation(MOVE_LEFT);
 				posPlayer.x -= SPEEDX;
@@ -319,7 +323,7 @@ void Player::update(int deltaTime)
 				}
 			}
 			//RIGHT MOVEMENT
-			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && posPlayer.x <= 480)
 			{
 				if (sprite->animation() != MOVE_RIGHT) sprite->changeAnimation(MOVE_RIGHT);
 				posPlayer.x += SPEEDX;
@@ -372,6 +376,7 @@ void Player::update(int deltaTime)
 			// CUANDO ESTAS EN EL SUELO
 			else {
 				if (map->getMolla()) {
+					collisionEffects->play2D("sound/molla.wav", false);
 					isMolla = true;
 					bJumping = true;
 					jumpAngle = 0;
