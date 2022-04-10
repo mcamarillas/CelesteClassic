@@ -13,10 +13,13 @@ public:
 	void updateYSnow();
 	void update(int deltaTime);
 	void render();
+	void setA(int A);
+	void setW(float w);
 
 private:
 	int speed;
 	int A;
+	float w;
 	int y;
 	Texture spritesheet;
 	Sprite* sprite;

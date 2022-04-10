@@ -3,8 +3,8 @@
 #include <GL/glut.h>
 #include "objectManager.h"
 
-void objectManager::createObject(int id, glm::vec2 position, string s, glm::vec2 d, ShaderProgram& shaderProgram) {
-	Object *o = new Object(id, position, s, d,  shaderProgram);
+void objectManager::createObject(int id, int type, glm::vec2 position, string s, glm::vec2 d, ShaderProgram& shaderProgram) {
+	Object *o = new Object(id,type, position, s, d,  shaderProgram);
 	objects[id] = o;
 }
 

@@ -109,7 +109,7 @@ void Player::checkCollisions() {
 	else rightCol = false;
 	aux.x -= SPEEDX;
 
-	int py = int(startY - 96 * sin(3.14159 * jumpAngle / 180.f));
+	int py = int(startY - JUMP_HEIGHT * sin(3.14159 * jumpAngle / 180.f));
 
 	aux.y += FALL_STEP;
 	
@@ -288,7 +288,7 @@ void Player::update(int deltaTime)
 			bJumping = false;
 			dashAngle = 0;
 		}
-		int py = int(startY - 96 * sin(3.14159 * jumpAngle / 180.f));
+		int py = int(startY - JUMP_HEIGHT * sin(3.14159 * jumpAngle / 180.f));
 		if (specialMove != 0)
 		{
 			switch (specialMove) {

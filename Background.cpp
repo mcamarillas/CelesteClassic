@@ -17,7 +17,7 @@ void Background::updateX() {
 }
 
 void Background::updateYSnow() {
-	position.y = 10 * sin(0.05 * position.x) + y * 32;
+	position.y = A * sin(w * position.x) + y * 32;
 }
 
 void Background::update(int deltaTime) {
@@ -28,4 +28,12 @@ void Background::update(int deltaTime) {
 
 void Background::render() {
 	sprite->render();
+}
+
+void Background::setA(int A) {
+	this->A = A;
+}
+
+void Background::setW(float w) {
+	this->w = w;
 }

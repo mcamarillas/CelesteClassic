@@ -26,6 +26,7 @@ public:
 	~TileMap();
 
 	void render() const;
+	void update();
 	void free();
 	int getTileSize() const { return tileSize; }
 	bool getSpikes();
@@ -54,6 +55,10 @@ private:
 	int *map;
 	bool spikes = false;
 	bool molla = false;
+	bool updateMap = false;
+	glm::vec2 mPos;
+	ShaderProgram texProgram;
+	int countt = 0;
 
 };
 

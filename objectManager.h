@@ -11,7 +11,7 @@ class objectManager
 	
 public:
 	void paintObjects(int deltaTime);
-	void createObject(int id, glm::vec2 position, string s,glm::vec2 d, ShaderProgram& shaderProgram);
+	void createObject(int id, int type,glm::vec2 position, string s,glm::vec2 d, ShaderProgram& shaderProgram);
 	void deleteObjects();
 	void renderObjects();
 	void deleteObject(int id);

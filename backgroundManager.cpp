@@ -18,9 +18,13 @@ void backgroundManager::init(ShaderProgram& shaderProgram) {
 		Background* b = new Background();
 		int x1 = (rand() % 100) - 100;
 		int y1 = (rand() % 16);
-		int x = (rand() % 7) + 1;
-		int speed = (rand() % 4) + 1;
+		int x = (rand() % 5) + 3;
+		int speed = (rand() % 5) + 1;
+		int A = (rand() % 25) + 10;
+		float w = (rand() % 4 + 1)/ 100.f;
 		b->init("images/White.png", glm::vec2(x1, y1), glm::vec2(x,x), speed, shaderProgram);
+		b->setA(A);
+		b->setW(w);
 		snows[i] = b;
 	}
 }

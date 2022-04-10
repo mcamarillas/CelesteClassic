@@ -11,7 +11,6 @@
 #define INIT_PLAYER_X_TILES 0
 #define INIT_PLAYER_Y_TILES 12
 
-
 Scene::Scene()
 {
 	map = NULL;
@@ -65,6 +64,7 @@ void Scene::update(int deltaTime)
 	player->update(deltaTime);
 	obj.checkCollisions(player->getPosition());
 	background.updateBackground(deltaTime);
+	map->update();
 }
 
 void Scene::render()
@@ -158,7 +158,8 @@ void Scene::changeLevel(int level) {
 	case 4:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level04.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		obj.createObject(1, glm::vec2(2, 10), "images/fresita.png", glm::vec2(1, 1), texProgram);
+		
+		obj.createObject(1,0, glm::vec2(2, 10), "images/fresita.png", glm::vec2(1, 1), texProgram);
 		lvl = level;
 		break;
 	case 5:

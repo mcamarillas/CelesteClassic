@@ -1,11 +1,8 @@
 #include "Object.h"
 
-enum PlayerAnims
-{
-	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT, WALL_LEFT
-};
 
-Object::Object(int id, glm::vec2 position, string s, glm::vec2 d, ShaderProgram& shaderProgram) {
+
+Object::Object(int id, int type, glm::vec2 position, string s, glm::vec2 d, ShaderProgram& shaderProgram) {
 	this->id = id;
 	this->position.x = position.x * 32;
 	this->position.y = position.y * 32;

@@ -22,6 +22,8 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProg
 {
 	loadLevel(levelFile);
 	prepareArrays(minCoords, program);
+	mPos = minCoords;
+	texProgram = program;
 }
 
 TileMap::~TileMap()
@@ -228,7 +230,13 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 			
 		}
 		if (count(spikesV.begin(), spikesV.end(), map[(y-1) * mapSize.x + x])) spikes = true;
-		if (48 ==  map[(y) * mapSize.x + x]) molla = true;
+		if (48 == map[(y)*mapSize.x + x]) {
+			map[(y)*mapSize.x + x] = 49;
+			countt = 0;
+			prepareArrays(mPos, texProgram);
+			molla = true;
+			updateMap = true;
+		}
 	}
 
 	return result;
@@ -260,6 +268,23 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	return false;
 }
 
+void TileMap::update() {
+	if (updateMap == true) countt++;
+	if (updateMap == true && countt == 10) {
+		countt = 0;
+		updateMap = false;
+		for (int j = 0; j < mapSize.y; j++)
+		{
+			for (int i = 0; i < mapSize.x; i++)
+			{
+				if (map[j * mapSize.x + i] == 49) {
+					map[j * mapSize.x + i] = 48;
+					prepareArrays(mPos, texProgram);
+				}
+			}
+		}
+	}
+}
 
 
 
