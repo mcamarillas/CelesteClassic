@@ -54,19 +54,18 @@ int Object::getID() {
 }
 
 bool Object::hasCollisioned(glm::vec2 playerPos) {
-	/*int playerTileX = playerPos.x / 32;
-	int playerTileY = playerPos.y / 32;
-	int playerTileX3 = (playerPos.x + 30) / 32;
-	
-	int objTileX = position.x / 32;
-	int objTileY = position.y / 32;*/
 	int rangX0 = position.x - 30;
 	int rangX1 = position.x + 30;
 	int rangY0 = position.y + 62;
 	int rangY1 = position.y;
 	if (playerPos.x > rangX0 && playerPos.x < rangX1 && playerPos.y < rangY0 && playerPos.y > rangY1) {
-		goalEffects->play2D("sound/strawBerry.wav", false);
-		if (type == 1) open = true;
+		if (type == 1) {
+			open = true;
+			goalEffects->play2D("sound/key.wav", false);
+		}
+		else if (type == 0) {
+			goalEffects->play2D("sound/strawBerry.wav", false);
+		}
 		return true;
 	}
 	return false;
