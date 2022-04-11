@@ -1,0 +1,7 @@
+TILEMAP
+1 2						        -- Size of tile map in tiles
+512 512							-- Tile size & block size
+images/controls.png 	-- Tilesheet
+1 1
+01
+01
