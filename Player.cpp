@@ -169,9 +169,15 @@ void Player::updateJump()
 		posPlayer.x -= SPEEDX;
 		bool lCol = map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32));
 		posPlayer.x += SPEEDX;
-		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && rCol && jumpAngle > 32) rightJump();
+		if (Game::instance().getKey('c') && !cPressed && rCol && jumpAngle > 32) {
+			cPressed = true;
+			rightJump();
+		}
 		//ACTIVATE SPECIAL RIGHT JUMP	
-		else if (Game::instance().getSpecialKey(GLUT_KEY_UP) && lCol && jumpAngle > 32) leftJump();
+		else if (Game::instance().getKey('c') && !cPressed && lCol && jumpAngle > 32) {
+			cPressed = true;
+			leftJump();
+		}
 	
 	
 	
@@ -381,10 +387,12 @@ void Player::update(int deltaTime)
 			posPlayer.y += FALL_STEP;
 			if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
 
-				if (Game::instance().getSpecialKey(GLUT_KEY_UP) && rightCol && !upCol) {
+				if (Game::instance().getKey('c') && !cPressed && rightCol && !upCol) {
+					cPressed = true;
 					rightJump();
 				}
-				else if (Game::instance().getSpecialKey(GLUT_KEY_UP) && leftCol && !upCol) {
+				else if (Game::instance().getKey('c') && !cPressed && leftCol && !upCol) {
+					cPressed = true;
 					leftJump();
 				}
 			}
@@ -411,8 +419,9 @@ void Player::update(int deltaTime)
 					posPlayer.x -= SPEEDX;
 					sprite->changeAnimation(STAND_RIGHT);
 				}
-				if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+				if (Game::instance().getKey('c') && !cPressed)
 				{
+					cPressed = true;
 					movementEffects->play2D("sound/jump.wav", false);
 					if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT)
 						sprite->changeAnimation(JUMP_LEFT);
@@ -433,6 +442,9 @@ void Player::update(int deltaTime)
 	else if (posPlayer.x <= 0 && posPlayer.x > -1000) {
 		posPlayer.x = 0;
 		specialMove = 0;
+	}
+	if (!Game::instance().getKey('c')) {
+		cPressed = false;
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x + OFFSETX), float(tileMapDispl.y + posPlayer.y + OFFSETY)));
 

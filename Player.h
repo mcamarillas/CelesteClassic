@@ -33,6 +33,7 @@ public:
 
 private:
     bool bJumping;
+    bool cPressed;
     bool isDashing;
     bool leftCol, rightCol, downCol, upCol;
     bool underGround = false;
