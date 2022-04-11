@@ -9,7 +9,7 @@ Object::Object(int id, int type, glm::vec2 position, string s, glm::vec2 d, Shad
 	this->type = type;
 	spritesheet.loadFromFile(s, TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), d, &spritesheet, &shaderProgram);
-	if (type == 1) { // KEYS
+	if (type == 1 || type == 3) { // KEYS
 		sprite->setNumberAnimations(3);
 		sprite->setAnimationSpeed(0, 8);
 		sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
@@ -58,15 +58,19 @@ bool Object::hasCollisioned(glm::vec2 playerPos) {
 	int rangX1 = position.x + 30;
 	int rangY0 = position.y + 62;
 	int rangY1 = position.y;
-	if (playerPos.x > rangX0 && playerPos.x < rangX1 && playerPos.y < rangY0 && playerPos.y > rangY1) {
-		if (type == 1) {
-			open = true;
-			goalEffects->play2D("sound/key.wav", false);
+	if (type == 3) {
+	}
+	else {
+		if (playerPos.x > rangX0 && playerPos.x < rangX1 && playerPos.y < rangY0 && playerPos.y > rangY1) {
+			if (type == 1) {
+				open = true;
+				goalEffects->play2D("sound/key.wav", false);
+			}
+			else if (type == 0) {
+				goalEffects->play2D("sound/strawBerry.wav", false);
+			}
+			return true;
 		}
-		else if (type == 0) {
-			goalEffects->play2D("sound/strawBerry.wav", false);
-		}
-		return true;
 	}
 	return false;
 }

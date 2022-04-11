@@ -297,20 +297,21 @@ void Player::update(int deltaTime)
 		{
 			switch (specialMove) {
 			case 1:
+				isMolla = false;
 				moveLeft();
 				break;
 			case 2:
+				isMolla = false;
 				moveRight();
 				break;
 			case 3:
+				isMolla = false;
 				dash();
 				break;
 			}
 		}
 		else
 		{
-
-
 			//LEFT MOVEMENT
 			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && posPlayer.x >= 0)
 			{

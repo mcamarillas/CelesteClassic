@@ -89,9 +89,9 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 
 	map->render();
-	
-	player->render();
 	obj.renderObjects();
+	player->render();
+	
 	background.renderSnow();
 }
 
@@ -144,6 +144,8 @@ void Scene::initShaders()
 
 void Scene::changeLevel(int level) {
 	obj.deleteObjects();
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	background.setCloudColor("images/Blue.png");
 	switch (level) {
 	case 1:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
@@ -204,6 +206,7 @@ void Scene::changeLevel(int level) {
 		background.setCloudColor("images/rosita.png");
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/final.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		obj.createObject(1, 3, glm::vec2(7, 7), "images/bandera.png", glm::vec2(1. / 3, 1), texProgram);
 		lvl = level;
 		break;
 	}
