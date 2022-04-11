@@ -47,6 +47,7 @@ void Scene::init()
 	initShaders();
 	lvl = 0;
 	map = TileMap::createTileMap("levels/startScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	s = "levels/startScreen.txt";
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(300, 100));
@@ -82,6 +83,12 @@ void Scene::render()
 	glm::mat4 modelview;
 
 	texProgram.use();
+	if (player->getTicks() >= 0) {
+		player->stopDashMove();
+		int t = player->getTicks();
+		if (t % 2 == 0) t = -t;
+		map = TileMap::createTileMap(s, glm::vec2(SCREEN_X+t, SCREEN_Y+t), texProgram);
+	}
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
@@ -156,16 +163,19 @@ void Scene::changeLevel(int level) {
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
+		s = "levels/level01.txt";
 		break;
 	case 2:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES + 2) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
+		s = "levels/level02.txt";
 		break;
 	case 3:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level03.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
+		s = "levels/level03.txt";
 		obj.createObject(1, 0, glm::vec2(1, 5), "images/fresita.png", glm::vec2(1, 1), texProgram);
 		break;
 	case 4:
@@ -173,11 +183,13 @@ void Scene::changeLevel(int level) {
 		map = TileMap::createTileMap("levels/level04.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		obj.createObject(1,0, glm::vec2(2, 5), "images/fresita.png", glm::vec2(1, 1), texProgram);
 		lvl = level;
+		s = "levels/level04.txt";
 		break;
 	case 5:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 1) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level05.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
+		s = "levels/level05.txt";
 		obj.createObject(1, 1, glm::vec2(7, 14), "images/llave.png", glm::vec2(1./3, 1), texProgram);
 		break;
 	case 6:
@@ -185,26 +197,31 @@ void Scene::changeLevel(int level) {
 		map = TileMap::createTileMap("levels/level06.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		obj.createObject(1, 2, glm::vec2(9, 8), "images/globo.png", glm::vec2(1./3, 1), texProgram);
 		lvl = level;
+		s = "levels/level06.txt";
 		break;
 	case 7:
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level07.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
+		s = "levels/level07.txt";
 		break;
 	case 8:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES + 2) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level08.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
+		s = "levels/level08.txt";
 		break;
 	case 9:
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 2) * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level09.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
+		s = "levels/level09.txt";
 		break;
 	case 10:
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level10.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
+		s = "levels/level10.txt";
 		break;
 	case 11:
 		glClearColor(0.5254f, 0.1882f, 0.3294f, 1.0f);

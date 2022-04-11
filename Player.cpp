@@ -193,6 +193,13 @@ void Player::respawn() {
 	map->respawn();
 }
 
+void Player::stopDashMove() {
+	if (ticks > 1) ticks -= 1;
+}
+int Player::getTicks() {
+	return ticks;
+}
+
 void Player::resetLvl() {
 	nextLvl = false;
 }
@@ -248,187 +255,187 @@ void Player::update(int deltaTime)
 		if (god) god = false;
 		else god = true;
 	}
-	else{	
-		sprite->update(deltaTime);
-		if (posPlayer.y <= 1) {
-			nextLvl = true;
-			posPlayer.y = 700;
-			bJumping = false;
-			specialMove = 0;
-			goalEffects->play2D("sound/nextlvl.wav", false);
-		}
-		else if (posPlayer.y >= 512 || posPlayer.x > (32 * 16 + 25)) {
-			collisionEffects->play2D("sound/respawn.wav", false);
-			underGround = true;
-		}
-		else if (map->getSpikes() && !god) {
-			collisionEffects->play2D("sound/spikes.wav", false);
-			underGround = true;
-		}
-		else {
+	sprite->update(deltaTime);
+	if (posPlayer.y <= 1) {
+		nextLvl = true;
+		posPlayer.y = 700;
+		bJumping = false;
+		specialMove = 0;
+		goalEffects->play2D("sound/nextlvl.wav", false);
+	}
+	else if (posPlayer.y >= 512 || posPlayer.x > (32 * 16 + 25)) {
+		collisionEffects->play2D("sound/respawn.wav", false);
+		underGround = true;
+	}
+	else if (map->getSpikes() && !god) {
+		collisionEffects->play2D("sound/spikes.wav", false);
+		underGround = true;
+	}
+	else {
 
-			checkCollisions();
+		checkCollisions();
+		//LEFT MOVEMENT
+		if (Game::instance().getKey('x') && (!isDashing || infiniteDash))
+		{
+			ticks = 6;
+			movementEffects->play2D("sound/dash.wav", false);
+			if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+			{
+				dashY = 1;
+			}
+			else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+			{
+				dashY = 2;
+			}
+			else dashY = 0;
+			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+			{
+				dashX = 1;
+			}
+			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+			{
+				dashX = 2;
+			}
+			else if (dashY == 0) {
+				if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT) dashX = 1;
+				else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT) dashX = 2;
+			}
+			else dashX = 0;
+			specialMove = 3;
+			isDashing = true;
+			bJumping = false;
+			dashAngle = 0;
+		}
+		int py = int(startY - JUMP_HEIGHT * sin(3.14159 * jumpAngle / 180.f));
+		if (specialMove != 0)
+		{
+			switch (specialMove) {
+			case 1:
+				isMolla = false;
+				moveLeft();
+				break;
+			case 2:
+				isMolla = false;
+				moveRight();
+				break;
+			case 3:
+				isMolla = false;
+				dash();
+				break;
+			}
+		}
+		else
+		{
 			//LEFT MOVEMENT
-			if (Game::instance().getKey('x') && (!isDashing || infiniteDash))
+			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 			{
-				movementEffects->play2D("sound/dash.wav", false);
-				if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+				if (sprite->animation() != MOVE_LEFT) sprite->changeAnimation(MOVE_LEFT);
+				posPlayer.x -= SPEEDX;
+				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 				{
-					dashY = 1;
-				}
-				else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
-				{
-					dashY = 2;
-				}
-				else dashY = 0;
-				if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
-				{
-					dashX = 1;
-				}
-				else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
-				{
-					dashX = 2;
-				}
-				else if (dashY == 0) {
-					if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT) dashX = 1;
-					else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT) dashX = 2;
-				}
-				else dashX = 0;
-				specialMove = 3;
-				isDashing = true;
-				bJumping = false;
-				dashAngle = 0;
-			}
-			int py = int(startY - JUMP_HEIGHT * sin(3.14159 * jumpAngle / 180.f));
-			if (specialMove != 0)
-			{
-				switch (specialMove) {
-				case 1:
-					isMolla = false;
-					moveLeft();
-					break;
-				case 2:
-					isMolla = false;
-					moveRight();
-					break;
-				case 3:
-					isMolla = false;
-					dash();
-					break;
+					posPlayer.x += SPEEDX;
+					sprite->changeAnimation(STAND_LEFT);
 				}
 			}
+			//RIGHT MOVEMENT
+			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+			{
+				if (sprite->animation() != MOVE_RIGHT) sprite->changeAnimation(MOVE_RIGHT);
+				posPlayer.x += SPEEDX;
+				if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
+				{
+					posPlayer.x -= SPEEDX;
+					sprite->changeAnimation(STAND_RIGHT);
+				}
+
+			}
+			//TRATAR ANIMACION PARADO
 			else
 			{
-				//LEFT MOVEMENT
-				if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
-				{
-					if (sprite->animation() != MOVE_LEFT) sprite->changeAnimation(MOVE_LEFT);
-					posPlayer.x -= SPEEDX;
-					if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
-					{
-						posPlayer.x += SPEEDX;
-						sprite->changeAnimation(STAND_LEFT);
-					}
-				}
-				//RIGHT MOVEMENT
-				else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
-				{
-					if (sprite->animation() != MOVE_RIGHT) sprite->changeAnimation(MOVE_RIGHT);
-					posPlayer.x += SPEEDX;
-					if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
-					{
-						posPlayer.x -= SPEEDX;
-						sprite->changeAnimation(STAND_RIGHT);
-					}
+				if (sprite->animation() == MOVE_LEFT) sprite->changeAnimation(STAND_LEFT);
+				else if (sprite->animation() == MOVE_RIGHT)	sprite->changeAnimation(STAND_RIGHT);
+			}
 
-				}
-				//TRATAR ANIMACION PARADO
-				else
-				{
-					if (sprite->animation() == MOVE_LEFT) sprite->changeAnimation(STAND_LEFT);
-					else if (sprite->animation() == MOVE_RIGHT)	sprite->changeAnimation(STAND_RIGHT);
-				}
-
-			}
-			//TRATAR EL SALTO ACTIVO
-			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &py) && bJumping) {
-				bJumping = false;
-				isMolla = false;
-				specialMove = 0;
-			}
-			else if (bJumping) {
-				if (isMolla) py = int(startY - 128 * sin(3.14159 * jumpAngle / 180.f));
-				posPlayer.y = py;
-			}
-			// CUANDO ESTAS CAYENDO		
-			if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
-				bJumping = false;
-				isMolla = false;
-				specialMove = 0;
-			}
-			if (bJumping) updateJump();
-			//TRATAR POSIBLE ACTIVACION DE SALTO
-			else if (specialMove != 3)
-			{
-				// CUANDO ESTAS CAYENDO
-				posPlayer.y += FALL_STEP;
-				if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
-
-					if (Game::instance().getSpecialKey(GLUT_KEY_UP) && rightCol && !upCol) {
-						rightJump();
-					}
-					else if (Game::instance().getSpecialKey(GLUT_KEY_UP) && leftCol && !upCol) {
-						leftJump();
-					}
-				}
-				// CUANDO ESTAS EN EL SUELO
-				else {
-					if (map->getMolla()) {
-						collisionEffects->play2D("sound/molla.wav", false);
-						isMolla = true;
-						bJumping = true;
-						jumpAngle = 0;
-						startY = posPlayer.y;
-						map->noMolla();
-					}
-					isDashing = false;
-					posPlayer.x -= SPEEDX;
-					if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
-					{
-						posPlayer.x += SPEEDX;
-						sprite->changeAnimation(STAND_LEFT);
-					}
-					posPlayer.x += SPEEDX;
-					if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
-					{
-						posPlayer.x -= SPEEDX;
-						sprite->changeAnimation(STAND_RIGHT);
-					}
-					if (Game::instance().getSpecialKey(GLUT_KEY_UP))
-					{
-						movementEffects->play2D("sound/jump.wav", false);
-						if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT)
-							sprite->changeAnimation(JUMP_LEFT);
-						else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT)
-							sprite->changeAnimation(JUMP_RIGHT);
-						bJumping = true;
-						specialMove = 0;
-						jumpAngle = 0;
-						startY = posPlayer.y;
-					}
-				}
-			}
 		}
-		if (posPlayer.x >= 480) {
-			posPlayer.x = 480;
+		//TRATAR EL SALTO ACTIVO
+		if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &py) && bJumping) {
+			bJumping = false;
+			isMolla = false;
 			specialMove = 0;
 		}
-		else if (posPlayer.x <= 0 && posPlayer.x > -1000) {
-			posPlayer.x = 0;
+		else if (bJumping) {
+			if (isMolla) py = int(startY - 128 * sin(3.14159 * jumpAngle / 180.f));
+			posPlayer.y = py;
+		}
+		// CUANDO ESTAS CAYENDO		
+		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
+			bJumping = false;
+			isMolla = false;
 			specialMove = 0;
 		}
-		sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x + OFFSETX), float(tileMapDispl.y + posPlayer.y + OFFSETY)));
+		if (bJumping) updateJump();
+		//TRATAR POSIBLE ACTIVACION DE SALTO
+		else if (specialMove != 3)
+		{
+			// CUANDO ESTAS CAYENDO
+			posPlayer.y += FALL_STEP;
+			if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
+
+				if (Game::instance().getSpecialKey(GLUT_KEY_UP) && rightCol && !upCol) {
+					rightJump();
+				}
+				else if (Game::instance().getSpecialKey(GLUT_KEY_UP) && leftCol && !upCol) {
+					leftJump();
+				}
+			}
+			// CUANDO ESTAS EN EL SUELO
+			else {
+				if (map->getMolla()) {
+					collisionEffects->play2D("sound/molla.wav", false);
+					isMolla = true;
+					bJumping = true;
+					jumpAngle = 0;
+					startY = posPlayer.y;
+					map->noMolla();
+				}
+				isDashing = false;
+				posPlayer.x -= SPEEDX;
+				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+				{
+					posPlayer.x += SPEEDX;
+					sprite->changeAnimation(STAND_LEFT);
+				}
+				posPlayer.x += SPEEDX;
+				if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
+				{
+					posPlayer.x -= SPEEDX;
+					sprite->changeAnimation(STAND_RIGHT);
+				}
+				if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+				{
+					movementEffects->play2D("sound/jump.wav", false);
+					if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT)
+						sprite->changeAnimation(JUMP_LEFT);
+					else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT)
+						sprite->changeAnimation(JUMP_RIGHT);
+					bJumping = true;
+					specialMove = 0;
+					jumpAngle = 0;
+					startY = posPlayer.y;
+				}
+			}
+		}
 	}
+	if (posPlayer.x >= 480) {
+		posPlayer.x = 480;
+		specialMove = 0;
+	}
+	else if (posPlayer.x <= 0 && posPlayer.x > -1000) {
+		posPlayer.x = 0;
+		specialMove = 0;
+	}
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x + OFFSETX), float(tileMapDispl.y + posPlayer.y + OFFSETY)));
+
 }
 
 void Player::setDash(bool b) {

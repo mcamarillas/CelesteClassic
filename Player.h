@@ -24,6 +24,8 @@ public:
     void setPosition(const glm::vec2& pos);
     bool getUnderground();
     void respawn();
+    int getTicks();
+    void stopDashMove();
     void resetLvl();
     bool getNextLvl();
     glm::vec2 getPosition();
@@ -55,6 +57,7 @@ private:
 	void leftJump();
     bool isMolla;
     bool god;
+    int ticks;
 
 
 };

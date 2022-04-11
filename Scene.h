@@ -46,6 +46,7 @@ private:
 	glm::mat4 projection;
 	objectManager obj;
 	int lvl;
+	string s;
 	bool infDash = false;
 	backgroundManager background;
 };
