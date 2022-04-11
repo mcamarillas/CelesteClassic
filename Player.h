@@ -19,6 +19,7 @@ public:
     void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
     void update(int deltaTime);
     void render();
+    void setDash(bool b);
     void setTileMap(TileMap* tileMap);
     void setPosition(const glm::vec2& pos);
     bool getUnderground();
@@ -33,6 +34,7 @@ private:
     bool leftCol, rightCol, downCol, upCol;
     bool underGround = false;
     bool nextLvl = false;
+    bool infiniteDash;
     glm::ivec2 tileMapDispl, posPlayer;
     int jumpAngle, dashAngle, startY, specialMove, dashX, dashY;
     Texture spritesheet;
@@ -50,8 +52,8 @@ private:
     void checkCollisions();
 	void rightJump();
 	void leftJump();
-    void mollaJump();
     bool isMolla;
+    bool god;
 
 
 };

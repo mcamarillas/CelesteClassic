@@ -11,6 +11,11 @@ void Game::init()
 	soundTrack->play2D("sound/st1.wav", false);
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	scene.init();
+	speed = 1;
+}
+
+float Game::getSpeed() {
+	return speed;
 }
 
 
@@ -126,6 +131,10 @@ void Game::keyPressed(int key)
 		level = prevLvl;
 		change = true;
 		mode = GAME;
+	}
+	else if (key == 's') {
+		if (speed == 1) speed = 0.5;
+		else speed = 1;
 	}
 	keys[key] = true;
 }
