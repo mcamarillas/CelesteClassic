@@ -68,6 +68,10 @@ void Scene::update(int deltaTime)
 		obj.createObject(1, 0, newPos, "images/fresita.png", glm::vec2(1, 1), texProgram);
 		obj.setOpen(false);
 	}
+	if (obj.isGlobo()) {
+		player->setDash(false);
+		obj.setGlobo(false);
+	}
 	background.updateBackground(deltaTime);
 	map->update();
 }
@@ -166,7 +170,6 @@ void Scene::changeLevel(int level) {
 	case 4:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level04.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		
 		obj.createObject(1,0, glm::vec2(2, 5), "images/fresita.png", glm::vec2(1, 1), texProgram);
 		lvl = level;
 		break;
@@ -179,6 +182,7 @@ void Scene::changeLevel(int level) {
 	case 6:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 1) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level06.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		obj.createObject(1, 2, glm::vec2(9, 8), "images/globo.png", glm::vec2(1./3, 1), texProgram);
 		lvl = level;
 		break;
 	case 7:

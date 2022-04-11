@@ -17,11 +17,14 @@ public:
 	void deleteObject(int id);
 	void checkCollisions(glm::vec2 posPlayer);
 	bool isOpen();
+	bool isGlobo();
 	void setOpen(bool o);
+	void setGlobo(bool g);
 
 private:
 	map<int,Object*> objects;
 	bool open = false;
+	bool globo = false;
 
 };
 

@@ -23,11 +23,12 @@ public:
 	int getType();
 
 private:
-	int type; // 0 -> POINTABLE , 1 -> KEYS 2 -> BALLON
+	int type; // 0 -> POINTABLE , 1 -> KEYS 2 -> BALLON 3 -> BANDERA
 	int id;
 	float angle = 0;
 	int anim = 0;
 	bool open = false;
+	bool dash = false;
 	Texture spritesheet;
 	Sprite* sprite;
 	glm::vec2 position;

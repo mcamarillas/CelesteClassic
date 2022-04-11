@@ -8,8 +8,9 @@ Object::Object(int id, int type, glm::vec2 position, string s, glm::vec2 d, Shad
 	this->position.y = position.y * 32;
 	this->type = type;
 	spritesheet.loadFromFile(s, TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(32, 32), d, &spritesheet, &shaderProgram);
-	if (type == 1 || type == 3) { // KEYS
+	if(type != 2) sprite = Sprite::createSprite(glm::ivec2(32, 32), d, &spritesheet, &shaderProgram);
+	else sprite = Sprite::createSprite(glm::ivec2(32, 64), d, &spritesheet, &shaderProgram);
+	if (type == 1 || type == 3 || type == 2) { // KEYS BANFERA Y GLOBO
 		sprite->setNumberAnimations(3);
 		sprite->setAnimationSpeed(0, 8);
 		sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
@@ -34,7 +35,7 @@ void Object::update(int deltaTime) {
 		position.y = position.y + 0.6 * sin(angle);
 		angle += 0.05;
 	}
-	else if (type == 1) {
+	else if (type == 1 || type == 3 || type == 2) {
 		anim++;
 		anim %= 24;
 		if (anim <= 7) sprite->changeAnimation(0);
@@ -63,10 +64,12 @@ bool Object::hasCollisioned(glm::vec2 playerPos) {
 	else {
 		if (playerPos.x > rangX0 && playerPos.x < rangX1 && playerPos.y < rangY0 && playerPos.y > rangY1) {
 			if (type == 1) {
-				open = true;
 				goalEffects->play2D("sound/key.wav", false);
 			}
 			else if (type == 0) {
+				goalEffects->play2D("sound/strawBerry.wav", false);
+			}
+			else if (type == 2) {
 				goalEffects->play2D("sound/strawBerry.wav", false);
 			}
 			return true;
