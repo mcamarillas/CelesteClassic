@@ -7,7 +7,7 @@
 
 using namespace std;
 
-vector<int> nonCollisionableBlock = { 0, 4, 5, 6, 7, 19, 20, 24, 25, 26, 27, 31, 32, 33, 34, 85, 86, 87};
+vector<int> nonCollisionableBlock = { 0, 4, 5, 6, 7, 19, 20, 24, 25, 26, 27, 31, 32, 33, 34, 88, 85, 86, 87};
 vector<int> spikesV = {7, 85, 86, 87};
 
 TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
@@ -81,6 +81,7 @@ bool TileMap::loadLevel(const string &levelFile)
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	
+	ticks = new int[mapSize.x * mapSize.y];
 	map = new int[mapSize.x * mapSize.y];
 	for(int j=0; j<mapSize.y; j++)
 	{
@@ -175,7 +176,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	return false;
 }
 
-bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
+bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size)
 {
 	int x, y0, y1;	
 	x = (pos.x + size.x - 1) / tileSize;
@@ -185,6 +186,11 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	{
 		if(!count(nonCollisionableBlock.begin(), nonCollisionableBlock.end(), map[y*mapSize.x + x]))
 			return true;
+		if (map[(y)*mapSize.x + x] == 68) {
+			ticks[(y)*mapSize.x + x] = 0;
+			map[(y)*mapSize.x + x] = 69;
+			destroy = true;
+		}
 	}
 	
 	return false;
@@ -237,7 +243,11 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 			molla = true;
 			updateMap = true;
 		}
-		if (map[(y)*mapSize.x + x] == 68) destroy = false;
+		if (map[(y)*mapSize.x + x] == 68) {
+			ticks[(y)*mapSize.x + x] = 0;
+			map[(y)*mapSize.x + x] = 69;
+			destroy = true;
+		}
 	}
 
 	return result;
@@ -284,12 +294,19 @@ glm::vec2 TileMap::openCofre() {
 void TileMap::destroyFloor() {
 	for (int j = 0; j < mapSize.y; j++) {
 		for (int i = 0; i < mapSize.x; i++) {
-			if (map[j * mapSize.x + i] == 68) {
-				map[j * mapSize.x + i] = 69;
-				prepareArrays(mPos, texProgram);
+			if (map[j * mapSize.x + i] == 69) {
+				if (ticks[j * mapSize.x + i] == 16) map[j * mapSize.x + i] = 70;
 			}
+			else if (map[j * mapSize.x + i] == 70) {
+				if (ticks[j * mapSize.x + i] == 32) map[j * mapSize.x + i] = 88;
+			}
+			else if (map[j * mapSize.x + i] == 88) {
+				if (ticks[j * mapSize.x + i] == 64) map[j * mapSize.x + i] = 68;
+			}
+			ticks[j * mapSize.x + i]++;
 		}
 	}
+	prepareArrays(mPos, texProgram);
 }
 
 void TileMap::changeCoords(glm::vec2 pos)

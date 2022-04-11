@@ -34,7 +34,7 @@ public:
 	void noMolla();
 	void respawn();
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) const;
-	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
+	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size);
 	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY);
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY);
 	glm::vec2 openCofre();
@@ -54,7 +54,7 @@ private:
 	int tileSize, blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
-	int *map;
+	int *map, *ticks;
 	bool spikes = false;
 	bool molla = false;
 	bool updateMap = false;
@@ -62,6 +62,7 @@ private:
 	glm::vec2 mPos;
 	ShaderProgram texProgram;
 	int countt = 0;
+	
 
 };
 

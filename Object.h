@@ -23,7 +23,7 @@ public:
 	int getType();
 
 private:
-	int type; // 0 -> POINTABLE , 1 -> KEYS 2 -> BALLON 3 -> BANDERA
+	int type; // 0 -> POINTABLE , 1 -> KEYS, 2 -> BALLON, 3 -> BANDERA, 4 -> NUBE
 	int id;
 	float angle = 0;
 	int anim = 0;

@@ -50,7 +50,7 @@ void Scene::init()
 	s = "levels/startScreen.txt";
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(300, 100));
+	player->setPosition(glm::vec2(-1001, 100));
 	player->setTileMap(map);
 	background.init(texProgram);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -231,7 +231,7 @@ void Scene::changeLevel(int level) {
 		background.setCloudColor("images/rosita.png");
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/final.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		obj.createObject(1, 3, glm::vec2(7, 7), "images/bandera.png", glm::vec2(1. / 3, 1), texProgram);
+		obj.createObject(1, 3, glm::vec2(7, 7), "images/banderaEspaña.png", glm::vec2(1. / 3, 1), texProgram);
 		lvl = level;
 		break;
 	}
@@ -247,6 +247,7 @@ void Scene::changeCredits() {
 }
 
 void Scene::changeMainMenu() {
+	player->setPosition(glm::vec2(-1001, 100));
 	obj.deleteObjects();
 	map = TileMap::createTileMap("levels/startScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 }
