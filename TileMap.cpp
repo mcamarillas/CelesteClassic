@@ -237,6 +237,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 			molla = true;
 			updateMap = true;
 		}
+		if (map[(y)*mapSize.x + x] == 68) destroy = false;
 	}
 
 	return result;
@@ -280,6 +281,23 @@ glm::vec2 TileMap::openCofre() {
 	}
 }
 
+void TileMap::destroyFloor() {
+	for (int j = 0; j < mapSize.y; j++) {
+		for (int i = 0; i < mapSize.x; i++) {
+			if (map[j * mapSize.x + i] == 68) {
+				map[j * mapSize.x + i] = 69;
+				prepareArrays(mPos, texProgram);
+			}
+		}
+	}
+}
+
+void TileMap::changeCoords(glm::vec2 pos)
+{
+	mPos = pos;
+	prepareArrays(mPos, texProgram);
+}
+
 void TileMap::update() {
 	if (updateMap == true) countt++;
 	if (updateMap == true && countt == 10) {
@@ -294,6 +312,7 @@ void TileMap::update() {
 			}
 		}
 	}
+	if(destroy) destroyFloor();
 }
 
 

@@ -38,6 +38,8 @@ public:
 	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY);
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY);
 	glm::vec2 openCofre();
+	void destroyFloor();
+	void changeCoords(glm::vec2 pos);
 private:
 	bool loadLevel(const string &levelFile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
@@ -56,6 +58,7 @@ private:
 	bool spikes = false;
 	bool molla = false;
 	bool updateMap = false;
+	bool destroy = false;
 	glm::vec2 mPos;
 	ShaderProgram texProgram;
 	int countt = 0;

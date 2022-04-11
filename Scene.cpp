@@ -83,11 +83,11 @@ void Scene::render()
 	glm::mat4 modelview;
 
 	texProgram.use();
-	if (player->getTicks() >= 0) {
+	if (player->getTicks() > 0) {
 		player->stopDashMove();
 		int t = player->getTicks();
 		if (t % 2 == 0) t = -t;
-		map = TileMap::createTileMap(s, glm::vec2(SCREEN_X+t, SCREEN_Y+t), texProgram);
+		map->changeCoords(glm::vec2(SCREEN_X+t, SCREEN_Y+t));
 	}
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
@@ -208,12 +208,15 @@ void Scene::changeLevel(int level) {
 	case 8:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES + 2) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level08.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		obj.createObject(1, 2, glm::vec2(7, 4), "images/globo.png", glm::vec2(1. / 3, 1), texProgram);
 		lvl = level;
 		s = "levels/level08.txt";
 		break;
 	case 9:
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 2) * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level09.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		obj.createObject(1, 2, glm::vec2(8, 4), "images/globo.png", glm::vec2(1. / 3, 1), texProgram);
+		obj.createObject(2, 2, glm::vec2(4, 4), "images/globo.png", glm::vec2(1. / 3, 1), texProgram);
 		lvl = level;
 		s = "levels/level09.txt";
 		break;

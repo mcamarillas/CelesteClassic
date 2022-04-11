@@ -194,7 +194,7 @@ void Player::respawn() {
 }
 
 void Player::stopDashMove() {
-	if (ticks > 1) ticks -= 1;
+	ticks -= 1;
 }
 int Player::getTicks() {
 	return ticks;
