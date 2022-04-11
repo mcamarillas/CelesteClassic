@@ -136,6 +136,10 @@ void Game::keyPressed(int key)
 		if (speed == 1) speed = 0.5;
 		else speed = 1;
 	}
+	else if (key == 'd') {
+		bool b = scene.getInfDash();
+		scene.setInfDash(!b);
+	}
 	keys[key] = true;
 }
 

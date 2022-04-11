@@ -74,6 +74,7 @@ void Scene::update(int deltaTime)
 	}
 	background.updateBackground(deltaTime);
 	map->update();
+	player->setInfDash(infDash);
 }
 
 void Scene::render()
@@ -229,3 +230,14 @@ void Scene::changeMainMenu() {
 	obj.deleteObjects();
 	map = TileMap::createTileMap("levels/startScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 }
+
+bool Scene::getInfDash()
+{
+	return infDash;
+}
+
+void Scene::setInfDash(bool b)
+{
+	infDash = b;
+}
+

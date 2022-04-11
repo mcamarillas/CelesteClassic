@@ -32,7 +32,8 @@ public:
 	void changeInstrucctions();
 	void changeCredits();
 	void changeMainMenu();
-
+	bool getInfDash();
+	void setInfDash(bool b);
 
 private:
 	void initShaders();
@@ -45,6 +46,7 @@ private:
 	glm::mat4 projection;
 	objectManager obj;
 	int lvl;
+	bool infDash = false;
 	backgroundManager background;
 };
 

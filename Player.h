@@ -27,6 +27,7 @@ public:
     void resetLvl();
     bool getNextLvl();
     glm::vec2 getPosition();
+    void setInfDash(bool b);
 
 private:
     bool bJumping;

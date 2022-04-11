@@ -248,10 +248,6 @@ void Player::update(int deltaTime)
 		if (god) god = false;
 		else god = true;
 	}
-	if (Game::instance().getKey('d')) {
-		if (infiniteDash) infiniteDash = false;
-		else infiniteDash = true;
-	}
 	else{	
 		sprite->update(deltaTime);
 		if (posPlayer.y <= 1) {
@@ -457,6 +453,11 @@ void Player::setPosition(const glm::vec2& pos)
 glm::vec2 Player::getPosition()
 {
 	return posPlayer;
+}
+
+void Player::setInfDash(bool b)
+{
+	infiniteDash = b;
 }
 
 
