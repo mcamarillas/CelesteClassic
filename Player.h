@@ -30,6 +30,7 @@ public:
     bool getNextLvl();
     glm::vec2 getPosition();
     void setInfDash(bool b);
+    void isInCloud(bool b);
 
 private:
     bool bJumping;
@@ -39,6 +40,7 @@ private:
     bool underGround = false;
     bool nextLvl = false;
     bool infiniteDash;
+    bool isCloud;
     glm::ivec2 tileMapDispl, posPlayer;
     int jumpAngle, dashAngle, startY, specialMove, dashX, dashY;
     Texture spritesheet;
@@ -52,10 +54,10 @@ private:
     void moveLeft();
     void moveRight();
     void updateJump();
-    void dash(); 
+    void dash();
     void checkCollisions();
-	void rightJump();
-	void leftJump();
+    void rightJump();
+    void leftJump();
     bool isMolla;
     bool god;
     int ticks;

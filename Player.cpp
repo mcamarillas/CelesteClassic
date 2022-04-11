@@ -77,7 +77,7 @@ void Player::moveLeft()
 		sprite->changeAnimation(JUMP_LEFT);
 		specialMove = 0;
 	}
-	if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32),&posPlayer.y))
+	if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
 	{
 		specialMove = 0;
 		sprite->changeAnimation(STAND_LEFT);
@@ -114,7 +114,7 @@ void Player::checkCollisions() {
 	int py = int(startY - JUMP_HEIGHT * sin(3.14159 * jumpAngle / 180.f));
 
 	aux.y += FALL_STEP;
-	
+
 	if (map->collisionMoveDown(aux, glm::ivec2(32, 32), &aux.y)) downCol = true;
 	else downCol = false;
 
@@ -124,15 +124,15 @@ void Player::checkCollisions() {
 
 void Player::rightJump() {
 
-	    movementEffectsR->play2D("sound/jump.wav", false);
-		specialMove = 1;
-		if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT)
-			sprite->changeAnimation(JUMP_LEFT);
-		else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT)
-			sprite->changeAnimation(JUMP_RIGHT);
-		bJumping = true;
-		jumpAngle = 0;
-		startY = posPlayer.y;
+	movementEffectsR->play2D("sound/jump.wav", false);
+	specialMove = 1;
+	if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT)
+		sprite->changeAnimation(JUMP_LEFT);
+	else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT)
+		sprite->changeAnimation(JUMP_RIGHT);
+	bJumping = true;
+	jumpAngle = 0;
+	startY = posPlayer.y;
 }
 
 void Player::leftJump() {
@@ -152,35 +152,35 @@ void Player::updateJump()
 	//UPDATE JUMP DISTANCE
 	jumpAngle += JUMP_ANGLE_STEP;
 	//IF JUMP ENDED REINITIALIZE VARIABLES (CREATE FUNCTION)
-		if (jumpAngle >= 180)
-		{
-			bJumping = false;
-			isMolla = false;
-			posPlayer.y = startY;
-		}
-		else if (jumpAngle >= 90) {
-			specialMove = 0;
-		}
+	if (jumpAngle >= 180)
+	{
+		bJumping = false;
+		isMolla = false;
+		posPlayer.y = startY;
+	}
+	else if (jumpAngle >= 90) {
+		specialMove = 0;
+	}
 
-		//ACTIVATE SPECIAL LEFT JUMP
-		posPlayer.x += SPEEDX;
-		bool rCol = map->collisionMoveRight(posPlayer, glm::ivec2(32, 32));
-		posPlayer.x -= SPEEDX;
-		posPlayer.x -= SPEEDX;
-		bool lCol = map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32));
-		posPlayer.x += SPEEDX;
-		if (Game::instance().getKey('c') && !cPressed && rCol && jumpAngle > 32) {
-			cPressed = true;
-			rightJump();
-		}
-		//ACTIVATE SPECIAL RIGHT JUMP	
-		else if (Game::instance().getKey('c') && !cPressed && lCol && jumpAngle > 32) {
-			cPressed = true;
-			leftJump();
-		}
-	
-	
-	
+	//ACTIVATE SPECIAL LEFT JUMP
+	posPlayer.x += SPEEDX;
+	bool rCol = map->collisionMoveRight(posPlayer, glm::ivec2(32, 32));
+	posPlayer.x -= SPEEDX;
+	posPlayer.x -= SPEEDX;
+	bool lCol = map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32));
+	posPlayer.x += SPEEDX;
+	if (Game::instance().getKey('c') && !cPressed && rCol && jumpAngle > 32) {
+		cPressed = true;
+		rightJump();
+	}
+	//ACTIVATE SPECIAL RIGHT JUMP	
+	else if (Game::instance().getKey('c') && !cPressed && lCol && jumpAngle > 32) {
+		cPressed = true;
+		leftJump();
+	}
+
+
+
 }
 
 bool Player::getUnderground() {
@@ -204,6 +204,11 @@ void Player::stopDashMove() {
 }
 int Player::getTicks() {
 	return ticks;
+}
+
+void Player::isInCloud(bool b)
+{
+	isCloud = b;
 }
 
 void Player::resetLvl() {
@@ -230,14 +235,14 @@ void Player::dash()
 		}
 	}
 	else {
-		
+
 	}
 
 	if (dashY == 1) {
 		posPlayer.y -= DASH_SPEED;
 		if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
 			specialMove = 0;
-			posPlayer.y += 2*DASH_SPEED;
+			posPlayer.y += 2 * DASH_SPEED;
 		}
 	}
 	else if (dashY == 2) {
@@ -407,16 +412,16 @@ void Player::update(int deltaTime)
 					map->noMolla();
 				}
 				isDashing = false;
-				posPlayer.x -= SPEEDX;
+				posPlayer.x -= 1;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 				{
-					posPlayer.x += SPEEDX;
+					posPlayer.x += 1;
 					sprite->changeAnimation(STAND_LEFT);
 				}
-				posPlayer.x += SPEEDX;
+				posPlayer.x += 1;
 				if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 				{
-					posPlayer.x -= SPEEDX;
+					posPlayer.x -= 1;
 					sprite->changeAnimation(STAND_RIGHT);
 				}
 				if (Game::instance().getKey('c') && !cPressed)
@@ -478,7 +483,3 @@ void Player::setInfDash(bool b)
 {
 	infiniteDash = b;
 }
-
-
-
-

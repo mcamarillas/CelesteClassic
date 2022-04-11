@@ -3,6 +3,7 @@
 
 
 #include <glm/glm.hpp>
+#include <vector>
 #include "Texture.h"
 #include "ShaderProgram.h"
 
@@ -40,6 +41,7 @@ public:
 	glm::vec2 openCofre();
 	void destroyFloor();
 	void changeCoords(glm::vec2 pos);
+	void setCloudsCol(vector<glm::vec2>& pos);
 private:
 	bool loadLevel(const string &levelFile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
@@ -54,7 +56,7 @@ private:
 	int tileSize, blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
-	int *map, *ticks;
+	int *map, *mapAux, *ticks;
 	bool spikes = false;
 	bool molla = false;
 	bool updateMap = false;
@@ -62,6 +64,7 @@ private:
 	glm::vec2 mPos;
 	ShaderProgram texProgram;
 	int countt = 0;
+	vector<glm::vec2> cloudPos;
 	
 
 };

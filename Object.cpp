@@ -8,9 +8,10 @@ Object::Object(int id, int type, glm::vec2 position, string s, glm::vec2 d, Shad
 	this->position.y = position.y * 32;
 	this->type = type;
 	spritesheet.loadFromFile(s, TEXTURE_PIXEL_FORMAT_RGBA);
-	if(type != 2) sprite = Sprite::createSprite(glm::ivec2(32, 32), d, &spritesheet, &shaderProgram);
-	else sprite = Sprite::createSprite(glm::ivec2(32, 64), d, &spritesheet, &shaderProgram);
-	if (type == 1 || type == 3 || type == 2) { // KEYS BANFERA Y GLOBO
+	if(type == 2) sprite = Sprite::createSprite(glm::ivec2(32, 64), d, &spritesheet, &shaderProgram);
+	else if (type == 4) sprite = Sprite::createSprite(glm::ivec2(64, 32), d, &spritesheet, &shaderProgram);
+	else sprite = Sprite::createSprite(glm::ivec2(32, 32), d, &spritesheet, &shaderProgram);
+	if (type == 1 || type == 3 || type == 2) { // KEYS BANDERA Y GLOBO NUBES
 		sprite->setNumberAnimations(3);
 		sprite->setAnimationSpeed(0, 8);
 		sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
@@ -42,6 +43,17 @@ void Object::update(int deltaTime) {
 		else if(anim <= 15) sprite->changeAnimation(1);
 		else sprite->changeAnimation(2);
 	}
+	else if (type == 4) {
+		if (id % 2 == 0) {
+			position.x += 3;
+			if (position.x > 512) position.x = -64;
+		}
+		else {
+			position.x -= 3;
+			if (position.x < 0) position.x = 576;
+		}
+		
+	}
 	sprite->setPosition(position);
 	sprite->update(deltaTime);
 }
@@ -61,7 +73,7 @@ bool Object::hasCollisioned(glm::vec2 playerPos) {
 	int rangY1 = position.y;
 	if (type == 3) {
 	}
-	else {
+	else if (type != 4){
 		if (playerPos.x > rangX0 && playerPos.x < rangX1 && playerPos.y < rangY0 && playerPos.y > rangY1) {
 			if (type == 1) {
 				goalEffects->play2D("sound/key.wav", false);
@@ -81,6 +93,7 @@ bool Object::hasCollisioned(glm::vec2 playerPos) {
 int Object::getType() {
 	return type;
 }
+
 
 
 

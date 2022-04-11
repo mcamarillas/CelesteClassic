@@ -7,7 +7,7 @@
 
 using namespace std;
 
-vector<int> nonCollisionableBlock = { 0, 4, 5, 6, 7, 19, 20, 24, 25, 26, 27, 31, 32, 33, 34, 88, 85, 86, 87};
+vector<int> nonCollisionableBlock = { 0, 4, 5, 6, 7, 19, 20, 24, 25, 26, 27, 31, 32, 33, 34, 76, 88, 85, 86, 87};
 vector<int> spikesV = {7, 85, 86, 87};
 
 TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
@@ -83,6 +83,7 @@ bool TileMap::loadLevel(const string &levelFile)
 	
 	ticks = new int[mapSize.x * mapSize.y];
 	map = new int[mapSize.x * mapSize.y];
+	mapAux = new int[mapSize.x * mapSize.y];
 	for(int j=0; j<mapSize.y; j++)
 	{
 		for(int i=0; i<mapSize.x; i++)
@@ -91,11 +92,14 @@ bool TileMap::loadLevel(const string &levelFile)
 			fin.get(tile);
 			char aux = tile;
 			fin.get(tile);
-			if(tile == ' ')
-				map[j*mapSize.x+i] = 0;
+			if (tile == ' ') {
+				map[j * mapSize.x + i] = 0;
+				mapAux[j * mapSize.x + i] = 0;
+			}
 			else {
 				int a = (aux - '0') * 10 + tile - '0';
 				map[j * mapSize.x + i] = a;
+				mapAux[j * mapSize.x + i] = a;
 			}
 		}
 		fin.get(tile);
@@ -225,16 +229,16 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 
 	for (int x = x0; x <= x1; x++)
 	{
-		if (!count(nonCollisionableBlock.begin(), nonCollisionableBlock.end(), map[y * mapSize.x + x]))
+		if (!count(nonCollisionableBlock.begin(), nonCollisionableBlock.end(), map[y * mapSize.x + x]) || map[y * mapSize.x + x] == 76)
 		{
 			if (*posY - tileSize * y + size.y < 32)
 			{
 				*posY = tileSize * y - size.y;
 				result = true;
 			}
-
-			
+					
 		}
+
 		if (count(spikesV.begin(), spikesV.end(), map[(y-1) * mapSize.x + x])) spikes = true;
 		if (48 == map[(y)*mapSize.x + x]) {
 			map[(y)*mapSize.x + x] = 49;
@@ -249,6 +253,27 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 			destroy = true;
 		}
 	}
+	
+	for (glm::vec2 i : cloudPos) {
+		int rangX0 = i.x - 30;
+		int rangX1 = i.x + 63;
+		int rangY0 = i.y - 5;
+		int rangY1 = i.y + 5;
+		y = (i.y + size.y ) / tileSize;
+		int x = i.x / tileSize;
+		map[(y)*mapSize.x + x - 1] = mapAux[(y)*mapSize.x + x - 1];
+		if (pos.x > rangX0 && pos.x < rangX1 && *posY < rangY1 && *posY > rangY0) {
+			map[(y)*mapSize.x + x] = 76;
+			map[(y)*mapSize.x + x + 1] = 76;
+			map[(y)*mapSize.x + x + 2] = 76;
+		}
+		else {
+			map[(y)*mapSize.x + x] = mapAux[(y)*mapSize.x + x];
+			map[(y)*mapSize.x + x + 1] = mapAux[(y)*mapSize.x + x + 1];
+		}
+		
+	}
+	
 
 	return result;
 }
@@ -313,6 +338,11 @@ void TileMap::changeCoords(glm::vec2 pos)
 {
 	mPos = pos;
 	prepareArrays(mPos, texProgram);
+}
+
+void TileMap::setCloudsCol(vector<glm::vec2>& pos)
+{
+	cloudPos = pos;
 }
 
 void TileMap::update() {

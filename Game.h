@@ -53,11 +53,9 @@ private:
 	bool change = false;
 	bool bPlay;                       // Continue to play game?
 	Scene scene;                      // Scene to render
-	bool keys[256], specialKeys[256], push[256]; // Store key states so that 
-	enum {IDLE, PRESS, REPEAT, RELEASE};
+	bool keys[256], specialKeys[256]; // Store key states so that 
 	ISoundEngine* soundTrack = createIrrKlangDevice();
 	Mode mode = MENU;
-	int teclat[256];
 	float speed;
 };
 

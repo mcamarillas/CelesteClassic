@@ -20,9 +20,12 @@ public:
 	bool isGlobo();
 	void setOpen(bool o);
 	void setGlobo(bool g);
+	void getClouds(vector<glm::vec2> &pos);
+	bool cloudCol(glm::ivec2 pos);
 
 private:
 	map<int,Object*> objects;
+	vector<glm::vec2> clouds;
 	bool open = false;
 	bool globo = false;
 
