@@ -8,7 +8,8 @@
 using namespace std;
 
 vector<int> nonCollisionableBlock = { 0, 4, 5, 6, 7, 19, 20, 24, 25, 26, 27, 31, 32, 33, 34, 76, 88, 85, 86, 87};
-vector<int> spikesV = {7, 85, 86, 87};
+vector<int> spikesX = { 85, 86 };
+vector<int> spikesY = { 7, 87 };
 
 TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
 {
@@ -164,7 +165,7 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
 
-bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const
+bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) 
 {
 	int x, y0, y1;
 	
@@ -173,8 +174,10 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
+		if (count(spikesX.begin(), spikesX.end(), map[(y)*mapSize.x + x])) spikes = true;
 		if(!count(nonCollisionableBlock.begin(), nonCollisionableBlock.end(), map[y*mapSize.x + x]))
 			return true;
+
 	}
 	
 	return false;
@@ -195,6 +198,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size)
 			map[(y)*mapSize.x + x] = 69;
 			destroy = true;
 		}
+		if (count(spikesX.begin(), spikesX.end(), map[(y) * mapSize.x + x])) spikes = true;
 	}
 	
 	return false;
@@ -239,7 +243,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 					
 		}
 
-		if (count(spikesV.begin(), spikesV.end(), map[(y-1) * mapSize.x + x])) spikes = true;
+		if (count(spikesY.begin(), spikesY.end(), map[(y-1) * mapSize.x + x])) spikes = true;
 		if (48 == map[(y)*mapSize.x + x]) {
 			map[(y)*mapSize.x + x] = 49;
 			countt = 0;
