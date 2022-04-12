@@ -14,7 +14,7 @@ void objectManager::deleteObjects() {
 void objectManager::paintObjects(int deltaTime) {
 	clouds.clear();
 	for (std::map<int, Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
-		if (it->second->getType() == 4) clouds.push_back(it->second->getPosition());
+		if (it->second->getType() == 4) clouds.push_back(glm::vec3(it->second->getPosition(), it->second->getID()));
 		it->second->update(deltaTime);
 	}
 }
@@ -61,7 +61,7 @@ void objectManager::setGlobo(bool g)
 	globo = g;
 }
 
-void objectManager::getClouds(vector<glm::vec2>& pos) {
+void objectManager::getClouds(vector<glm::vec3>& pos) {
 	pos = clouds;
 }
 

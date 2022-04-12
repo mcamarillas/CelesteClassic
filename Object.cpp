@@ -45,12 +45,12 @@ void Object::update(int deltaTime) {
 	}
 	else if (type == 4) {
 		if (id % 2 == 0) {
-			position.x += 3;
+			position.x += 2;
 			if (position.x > 512) position.x = -64;
 		}
 		else {
-			position.x -= 3;
-			if (position.x < 0) position.x = 576;
+			position.x -= 2;
+			if (position.x < -64) position.x = 512;
 		}
 		
 	}

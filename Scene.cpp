@@ -62,7 +62,7 @@ void Scene::update(int deltaTime)
 	
 	currentTime += deltaTime;
 	obj.paintObjects(deltaTime);
-	vector<glm::vec2> pos;
+	vector<glm::vec3> pos;
 	obj.getClouds(pos);
 	map->setCloudsCol(pos);
 	player->update(deltaTime);
@@ -212,11 +212,12 @@ void Scene::changeLevel(int level) {
 		obj.createObject(1, 4, glm::vec2(1, 8), "images/nube.png", glm::vec2(1, 1), texProgram);
 		obj.createObject(3, 4, glm::vec2(9, 8), "images/nube.png", glm::vec2(1, 1), texProgram);
 		obj.createObject(4, 4, glm::vec2(3, 11), "images/nube.png", glm::vec2(1, 1), texProgram);
-		obj.createObject(6, 4, glm::vec2(8, 11), "images/nube.png", glm::vec2(1, 1), texProgram);
-		obj.createObject(8, 4, glm::vec2(13,11), "images/nube.png", glm::vec2(1, 1), texProgram);
+		obj.createObject(6, 4, glm::vec2(8.6, 11), "images/nube.png", glm::vec2(1, 1), texProgram);
+		obj.createObject(8, 4, glm::vec2(14.2,11), "images/nube.png", glm::vec2(1, 1), texProgram);
 		obj.createObject(5, 4, glm::vec2(3, 13), "images/nube.png", glm::vec2(1, 1), texProgram);
-		obj.createObject(7, 4, glm::vec2(8, 13), "images/nube.png", glm::vec2(1, 1), texProgram);
-		obj.createObject(9, 4, glm::vec2(13,13), "images/nube.png", glm::vec2(1, 1), texProgram);
+		obj.createObject(7, 4, glm::vec2(8.6, 13), "images/nube.png", glm::vec2(1, 1), texProgram);
+		obj.createObject(9, 4, glm::vec2(14.2,13), "images/nube.png", glm::vec2(1, 1), texProgram);
+		obj.createObject(10, 0, glm::vec2(10, 3), "images/fresita.png", glm::vec2(1, 1), texProgram);
 		s = "levels/level07.txt";
 		break;
 	case 8:

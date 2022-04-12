@@ -222,7 +222,7 @@ void TileMap::noMolla() {
 }
 
 
-bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) 
+bool TileMap::collisionMoveDown(glm::ivec2& pos, const glm::ivec2& size, int* posY) 
 {
 	int x0, x1, y;
 
@@ -258,24 +258,38 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 		}
 	}
 	
-	for (glm::vec2 i : cloudPos) {
+	for (glm::vec3 i : cloudPos) {
 		int rangX0 = i.x - 30;
 		int rangX1 = i.x + 63;
 		int rangY0 = i.y - 5;
 		int rangY1 = i.y + 5;
-		y = (i.y + size.y ) / tileSize;
+		y = (i.y + size.y) / tileSize;
 		int x = i.x / tileSize;
 		map[(y)*mapSize.x + x - 1] = mapAux[(y)*mapSize.x + x - 1];
+		map[(y)*mapSize.x + x + 2] = mapAux[(y)*mapSize.x + x + 2];
+		map[(y)*mapSize.x + x + 3] = mapAux[(y)*mapSize.x + x + 3];
 		if (pos.x > rangX0 && pos.x < rangX1 && *posY < rangY1 && *posY > rangY0) {
 			map[(y)*mapSize.x + x] = 76;
 			map[(y)*mapSize.x + x + 1] = 76;
 			map[(y)*mapSize.x + x + 2] = 76;
+			if (int(i.z) % 2 == 0) {
+				pos.x += 1;
+				if (collisionMoveRight(pos, glm::ivec2(32, 32))) pos.x -= 1;
+			}
+			else {
+				pos.x -= 1;
+				if (collisionMoveLeft(pos, glm::ivec2(32, 32))) pos.x += 1;
+			}
 		}
 		else {
+			if (i.x > 510) {
+				map[(y)*mapSize.x + 0] = mapAux[(y)*mapSize.x + 0];
+				map[(y)*mapSize.x + 1] = mapAux[(y)*mapSize.x + 1];
+				map[(y)*mapSize.x + 2] = mapAux[(y)*mapSize.x + 2];
+			}
 			map[(y)*mapSize.x + x] = mapAux[(y)*mapSize.x + x];
 			map[(y)*mapSize.x + x + 1] = mapAux[(y)*mapSize.x + x + 1];
 		}
-		
 	}
 	
 
@@ -344,7 +358,7 @@ void TileMap::changeCoords(glm::vec2 pos)
 	prepareArrays(mPos, texProgram);
 }
 
-void TileMap::setCloudsCol(vector<glm::vec2>& pos)
+void TileMap::setCloudsCol(vector<glm::vec3>& pos)
 {
 	cloudPos = pos;
 }

@@ -36,12 +36,12 @@ public:
 	void respawn();
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size);
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size);
-	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY);
+	bool collisionMoveDown(glm::ivec2& pos, const glm::ivec2& size, int* posY);
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY);
 	glm::vec2 openCofre();
 	void destroyFloor();
 	void changeCoords(glm::vec2 pos);
-	void setCloudsCol(vector<glm::vec2>& pos);
+	void setCloudsCol(vector<glm::vec3>& pos);
 private:
 	bool loadLevel(const string &levelFile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
@@ -64,7 +64,7 @@ private:
 	glm::vec2 mPos;
 	ShaderProgram texProgram;
 	int countt = 0;
-	vector<glm::vec2> cloudPos;
+	vector<glm::vec3> cloudPos;
 	
 
 };
