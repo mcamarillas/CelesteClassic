@@ -18,12 +18,15 @@ public:
 	void changeColor(string s);
 	void updateParticles(int deltaTime);
 	void createParticles(string s, glm::vec2 position, ShaderProgram& shaderProgram);
+	void setTicks(int tick);
+	int addTicks();
 
 private:
 	int speed;
 	int A;
 	float w;
 	int y;
+	int ticks;
 	glm::vec2 dimension;
 	ShaderProgram shader;
 	Texture spritesheet;

@@ -11,7 +11,7 @@ public:
 	void renderSnow();
 	void init(ShaderProgram& shaderProgram);
 	void setCloudColor(string s);
-	void createParticles(glm::vec2 pos, ShaderProgram& shaderProgram);
+	void createParticles(string s,glm::vec2 pos, ShaderProgram& shaderProgram);
 	void renderParticles();
 
 private:

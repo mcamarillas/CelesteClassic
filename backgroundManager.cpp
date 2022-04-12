@@ -36,11 +36,15 @@ void backgroundManager::setCloudColor(string s) {
 	}
 }
 
-void backgroundManager::createParticles(glm::vec2 pos, ShaderProgram& shaderProgram)
+void backgroundManager::createParticles(string s,glm::vec2 pos, ShaderProgram& shaderProgram)
 {
 	Background* b = new Background();
-	b->createParticles("images/polvo.png", pos, shaderProgram);
-	particles[0] = b;
+	b->createParticles(s, glm::vec2(pos.x,pos.y-32), shaderProgram);
+	b->setTicks(0);
+	if (particles.find(0) == particles.end()) particles[0] = b;
+	else if (particles.find(1) == particles.end()) particles[1] = b;
+	else if (particles.find(2) == particles.end()) particles[2] = b;
+	else particles[3] = b;
 }
 
 void backgroundManager::updateBackground(int deltaTime) {
@@ -54,6 +58,10 @@ void backgroundManager::updateBackground(int deltaTime) {
 		it->second->update(deltaTime);
 	}
 	for (std::map<int, Background*>::iterator it = particles.begin(); it != particles.end(); ++it) {
+		if (it->second->addTicks() == 25) {
+			particles.erase(it);
+			break;
+		}
 		it->second->updateParticles(deltaTime);
 	}
 }

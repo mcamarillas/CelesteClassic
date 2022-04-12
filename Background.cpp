@@ -32,6 +32,17 @@ void Background::createParticles(string s, glm::vec2 position, ShaderProgram& sh
 	sprite->changeAnimation(0);
 }
 
+void Background::setTicks(int tick)
+{
+	this->ticks = ticks;
+}
+
+int Background::addTicks()
+{
+	ticks++;
+	return ticks;
+}
+
 void Background::updateX() {
 	this->position.x += speed;
 }
