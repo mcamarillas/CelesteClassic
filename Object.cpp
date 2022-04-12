@@ -66,6 +66,7 @@ int Object::getID() {
 	return id;
 }
 
+
 bool Object::hasCollisioned(glm::vec2 playerPos) {
 	int rangX0 = position.x - 30;
 	int rangX1 = position.x + 30;

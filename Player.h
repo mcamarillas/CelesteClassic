@@ -31,6 +31,9 @@ public:
     glm::vec2 getPosition();
     void setInfDash(bool b);
     void isInCloud(bool b);
+    void initStrawberries();
+    void updateSB();
+    void setLvl(int lvl);
 
 private:
     bool bJumping;
@@ -42,6 +45,7 @@ private:
     bool nextLvl = false;
     bool infiniteDash;
     bool isCloud;
+    bool strawberries[10];
     glm::ivec2 tileMapDispl, posPlayer;
     int jumpAngle, dashAngle, startY, specialMove, dashX, dashY;
     Texture spritesheet;
@@ -62,6 +66,7 @@ private:
     bool isMolla;
     bool god;
     int ticks;
+    int lvl = 0;
 
 
 };

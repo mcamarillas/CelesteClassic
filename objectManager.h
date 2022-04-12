@@ -22,12 +22,14 @@ public:
 	void setGlobo(bool g);
 	void getClouds(vector<glm::vec3> &pos);
 	bool cloudCol(glm::ivec2 pos);
+	bool getStrawberry();
 
 private:
 	map<int,Object*> objects;
 	vector<glm::vec3> clouds;
 	bool open = false;
 	bool globo = false;
+	bool SWcaught = false;
 
 };
 

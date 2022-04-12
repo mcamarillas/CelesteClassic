@@ -87,14 +87,26 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 }
 
+void Player::initStrawberries() {
+	for (int i = 0; i < 10; i++) strawberries[i] = false;
+}
+
+void Player::setLvl(int lvl) {
+	this->lvl = lvl;
+}
+
+void Player::updateSB() {
+	strawberries[lvl-1] = true;
+}
 void Player::moveLeft()
 {
 	posPlayer.x -= SPEEDX;
 	if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 	{
-		posPlayer += SPEEDX;
-		if (!downCol && Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+		posPlayer.x += SPEEDX;
+		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 		{
+			//posPlayer.y -= FALL_STEP / 2;
 			sprite->changeAnimation(DESLIZANDO);
 		}
 		specialMove = 0;
@@ -111,9 +123,10 @@ void Player::moveRight()
 	posPlayer.x += SPEEDX;
 	if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 	{
-		posPlayer -= SPEEDX;
+		posPlayer.x -= SPEEDX;
 		if (!downCol && Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) {
-			sprite->changeAnimation(DESLIZANDO2);
+			posPlayer.y -= FALL_STEP / 2;
+			//sprite->changeAnimation(DESLIZANDO2);
 		}
 		specialMove = 0;
 	}
@@ -311,6 +324,8 @@ void Player::update(int deltaTime)
 {
 
 	sprite->update(deltaTime);
+	
+	//if (sprite->animation() == DESLIZANDO || sprite->animation() == DESLIZANDO2) posPlayer.y -= FALL_STEP / 2;
 	Yanimations();
 	if (Game::instance().getKey('g')) {
 		if (god) god = false;
@@ -325,10 +340,12 @@ void Player::update(int deltaTime)
 	}
 	else if (posPlayer.y >= 512 || posPlayer.x > (32 * 16 + 25)) {
 		collisionEffects->play2D("sound/respawn.wav", false);
+		strawberries[lvl] = false;
 		underGround = true;
 	}
 	else if (map->getSpikes() && !god) {
 		collisionEffects->play2D("sound/spikes.wav", false);
+		strawberries[lvl] = false;
 		underGround = true;
 	}
 	else {
@@ -395,7 +412,10 @@ void Player::update(int deltaTime)
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 				{
 					posPlayer.x += SPEEDX;
-					if (bJumping) sprite->changeAnimation(DESLIZANDO);
+					if (bJumping) {
+						sprite->changeAnimation(DESLIZANDO);
+						posPlayer.y -= FALL_STEP / 2;
+					}
 					else sprite->changeAnimation(STAND_LEFT);
 				}
 			}
@@ -408,7 +428,10 @@ void Player::update(int deltaTime)
 				if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 				{
 					posPlayer.x -= SPEEDX;
-					if(bJumping) sprite->changeAnimation(DESLIZANDO2);
+					if (bJumping) {
+						posPlayer.y -= FALL_STEP / 2;
+						sprite->changeAnimation(DESLIZANDO2);
+					}
 					else sprite->changeAnimation(STAND_RIGHT);
 				}
 
@@ -443,11 +466,18 @@ void Player::update(int deltaTime)
 		{
 			// CUANDO ESTAS CAYENDO
 			posPlayer.y += FALL_STEP;
-
+			if(sprite->animation() == DESLIZANDO2 || sprite->animation() == DESLIZANDO) posPlayer.y -= FALL_STEP/2;
 			if (sprite->animation() == DESLIZANDO2 && !leftCol) sprite->changeAnimation(STAND_LEFT);
 			else if (sprite->animation() == DESLIZANDO && !rightCol)	sprite->changeAnimation(STAND_RIGHT);
-			if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && rightCol && !downCol) sprite->changeAnimation(DESLIZANDO2);
-			else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && leftCol && !downCol) sprite->changeAnimation(DESLIZANDO);
+			if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && rightCol && !downCol) {
+				posPlayer.y -= FALL_STEP / 2;
+				sprite->changeAnimation(DESLIZANDO2);
+			}
+			else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && leftCol && !downCol) {
+				posPlayer.y -= FALL_STEP / 2;
+				sprite->changeAnimation(DESLIZANDO);
+
+			}
 
 			
 			
@@ -523,6 +553,7 @@ void Player::update(int deltaTime)
 	if (!Game::instance().getKey('c')) {
 		cPressed = false;
 	}
+	
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x + OFFSETX), float(tileMapDispl.y + posPlayer.y + OFFSETY)));
 
 }

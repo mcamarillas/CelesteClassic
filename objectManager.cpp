@@ -8,6 +8,12 @@ void objectManager::createObject(int id, int type, glm::vec2 position, string s,
 	objects[id] = o;
 }
 
+bool objectManager::getStrawberry() {
+	bool b = SWcaught;
+	SWcaught = false;
+	return b;
+}
+
 void objectManager::deleteObjects() {
 	objects.clear();
 }
@@ -32,6 +38,7 @@ void objectManager::deleteObject(int id) {
 void objectManager::checkCollisions(glm::vec2 posPlayer) {
 	for (std::map<int, Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
 		if (it->second->hasCollisioned(posPlayer)) {
+			if (it->second->getType() == 0) SWcaught = true;
 			if (it->second->getType() == 1) open = true;
 			if (it->second->getType() == 2) globo = true;
 			objects.erase(it);

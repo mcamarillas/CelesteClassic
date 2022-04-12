@@ -48,6 +48,7 @@ void Scene::init()
 	map = TileMap::createTileMap("levels/startScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	s = "levels/startScreen.txt";
 	player = new Player();
+	player->initStrawberries();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(-1001, 100));
 	player->setTileMap(map);
@@ -65,15 +66,21 @@ void Scene::update(int deltaTime)
 	obj.getClouds(pos);
 	map->setCloudsCol(pos);
 	player->update(deltaTime);
+	if (obj.getStrawberry()) player->updateSB();
 	obj.checkCollisions(player->getPosition());
 	if (obj.isOpen()) {
 		glm::vec2 newPos = map->openCofre();
-		obj.createObject(1, 0, newPos, "images/fresita.png", glm::vec2(1, 1), texProgram);
+		obj.createObject(12, 0, newPos, "images/fresita.png", glm::vec2(1, 1), texProgram);
 		obj.setOpen(false);
 	}
 	if (obj.isGlobo()) {
 		player->setDash(false);
 		obj.setGlobo(false);
+	}
+	glm::vec2 p;
+	if (map->getCreaFresa(p)) {
+		obj.createObject(1, 0, p, "images/fresita.png", glm::vec2(1, 1), texProgram);
+		map->setCreaFresa(false);
 	}
 	background.updateBackground(deltaTime);
 	map->update();
@@ -161,6 +168,7 @@ void Scene::changeLevel(int level) {
 	obj.deleteObjects();
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	background.setCloudColor("images/Blue.png");
+	player->setLvl(level);
 	switch (level) {
 	case 1:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
@@ -179,12 +187,12 @@ void Scene::changeLevel(int level) {
 		map = TileMap::createTileMap("levels/level03.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
 		s = "levels/level03.txt";
-		obj.createObject(1, 0, glm::vec2(1, 5), "images/fresita.png", glm::vec2(1, 1), texProgram);
+		obj.createObject(12, 0, glm::vec2(1, 5), "images/fresita.png", glm::vec2(1, 1), texProgram);
 		break;
 	case 4:
 		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level04.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		obj.createObject(1,0, glm::vec2(2, 5), "images/fresita.png", glm::vec2(1, 1), texProgram);
+		obj.createObject(12,0, glm::vec2(2, 5), "images/fresita.png", glm::vec2(1, 1), texProgram);
 		lvl = level;
 		s = "levels/level04.txt";
 		break;
@@ -216,7 +224,7 @@ void Scene::changeLevel(int level) {
 		obj.createObject(5, 4, glm::vec2(3, 13), "images/nube.png", glm::vec2(1, 1), texProgram);
 		obj.createObject(7, 4, glm::vec2(8.6, 13), "images/nube.png", glm::vec2(1, 1), texProgram);
 		obj.createObject(9, 4, glm::vec2(14.2,13), "images/nube.png", glm::vec2(1, 1), texProgram);
-		obj.createObject(10, 0, glm::vec2(10, 3), "images/fresita.png", glm::vec2(1, 1), texProgram);
+		obj.createObject(12, 0, glm::vec2(10, 3), "images/fresita.png", glm::vec2(1, 1), texProgram);
 		s = "levels/level07.txt";
 		break;
 	case 8:
