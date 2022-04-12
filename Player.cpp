@@ -19,7 +19,7 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT, WALL_LEFT
+	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT, WALL_LEFT, STAND_UP, STAND_UP2, STAND_DOWN, STAND_DOWN2, DESLIZANDO, DESLIZANDO2
 };
 
 
@@ -36,7 +36,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	//checkCollisions();
 	spritesheet.loadFromFile("images/Madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(4);
+	sprite->setNumberAnimations(13);
 
 	sprite->setAnimationSpeed(STAND_RIGHT, 8);
 	sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.f, 0.f));
@@ -55,13 +55,32 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.25, 0.5f));
 
 	sprite->setAnimationSpeed(JUMP_RIGHT, 8);
-	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(0.5f, 0.25f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(0.5f, 0.0f));
 
 	sprite->setAnimationSpeed(JUMP_LEFT, 8);
-	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.75f, 0.25f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.75f, 0.0f));
+
+	sprite->setAnimationSpeed(STAND_UP, 8);
+	sprite->addKeyframe(STAND_UP, glm::vec2(0.5f, 0.5f));
+
+	sprite->setAnimationSpeed(STAND_UP2, 8);
+	sprite->addKeyframe(STAND_UP2, glm::vec2(0.75f, 0.5f));
+
+	sprite->setAnimationSpeed(STAND_DOWN, 8);
+	sprite->addKeyframe(STAND_DOWN, glm::vec2(0.5f, 0.25f));
+
+	sprite->setAnimationSpeed(STAND_DOWN2, 8);
+	sprite->addKeyframe(STAND_DOWN2, glm::vec2(0.75f, 0.25f));
+
+	sprite->setAnimationSpeed(DESLIZANDO, 8);
+	sprite->addKeyframe(DESLIZANDO, glm::vec2(0.5f, 0.75f));
+
+	sprite->setAnimationSpeed(DESLIZANDO2, 8);
+	sprite->addKeyframe(DESLIZANDO2, glm::vec2(0.75f, 0.75f));
 
 	sprite->setAnimationSpeed(WALL_LEFT, 8);
 	sprite->addKeyframe(WALL_LEFT, glm::vec2(0.5f, 0.75));
+
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
@@ -74,7 +93,7 @@ void Player::moveLeft()
 	if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 	{
 		posPlayer += SPEEDX;
-		sprite->changeAnimation(JUMP_LEFT);
+		sprite->changeAnimation(DESLIZANDO);
 		specialMove = 0;
 	}
 	if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
@@ -89,7 +108,7 @@ void Player::moveRight()
 	if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 	{
 		posPlayer -= SPEEDX;
-		sprite->changeAnimation(JUMP_RIGHT);
+		sprite->changeAnimation(DESLIZANDO2);
 		specialMove = 0;
 	}
 	if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
@@ -262,11 +281,29 @@ void Player::dash()
 
 void Player::update(int deltaTime)
 {
+
+	sprite->update(deltaTime);
+
+	if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
+		if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT) sprite->changeAnimation(STAND_UP);
+		else if (sprite->animation() != STAND_UP)sprite->changeAnimation(STAND_UP2);
+	}
+	else {
+		if (sprite->animation() == STAND_UP) sprite->changeAnimation(STAND_RIGHT);
+		else if (sprite->animation() == STAND_UP2) sprite->changeAnimation(STAND_LEFT);
+	}
+	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+		if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT) sprite->changeAnimation(STAND_DOWN);
+		else if (sprite->animation() != STAND_DOWN)sprite->changeAnimation(STAND_DOWN2);
+	}
+	else {
+		if (sprite->animation() == STAND_DOWN) sprite->changeAnimation(STAND_RIGHT);
+		else if (sprite->animation() == STAND_DOWN2) sprite->changeAnimation(STAND_LEFT);
+	}
 	if (Game::instance().getKey('g')) {
 		if (god) god = false;
 		else god = true;
 	}
-	sprite->update(deltaTime);
 	if (posPlayer.y <= 1) {
 		nextLvl = true;
 		posPlayer.y = 700;
@@ -340,23 +377,25 @@ void Player::update(int deltaTime)
 			//LEFT MOVEMENT
 			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 			{
-				if (sprite->animation() != MOVE_LEFT) sprite->changeAnimation(MOVE_LEFT);
+				if (sprite->animation() != MOVE_LEFT && !bJumping) sprite->changeAnimation(MOVE_LEFT);
 				posPlayer.x -= SPEEDX;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 				{
 					posPlayer.x += SPEEDX;
-					sprite->changeAnimation(STAND_LEFT);
+					if (bJumping) sprite->changeAnimation(DESLIZANDO);
+					else sprite->changeAnimation(STAND_LEFT);
 				}
 			}
 			//RIGHT MOVEMENT
 			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 			{
-				if (sprite->animation() != MOVE_RIGHT) sprite->changeAnimation(MOVE_RIGHT);
+				if (sprite->animation() != MOVE_RIGHT && !bJumping) sprite->changeAnimation(MOVE_RIGHT);
 				posPlayer.x += SPEEDX;
 				if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 				{
 					posPlayer.x -= SPEEDX;
-					sprite->changeAnimation(STAND_RIGHT);
+					if(bJumping) sprite->changeAnimation(DESLIZANDO2);
+					else sprite->changeAnimation(STAND_RIGHT);
 				}
 
 			}
@@ -403,6 +442,9 @@ void Player::update(int deltaTime)
 			}
 			// CUANDO ESTAS EN EL SUELO
 			else {
+				if (sprite->animation() == JUMP_LEFT) sprite->changeAnimation(STAND_LEFT);
+				else if (sprite->animation() == JUMP_RIGHT)	sprite->changeAnimation(STAND_RIGHT);
+
 				if (map->getMolla()) {
 					collisionEffects->play2D("sound/molla.wav", false);
 					isMolla = true;
