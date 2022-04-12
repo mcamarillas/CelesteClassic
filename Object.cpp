@@ -10,6 +10,7 @@ Object::Object(int id, int type, glm::vec2 position, string s, glm::vec2 d, Shad
 	spritesheet.loadFromFile(s, TEXTURE_PIXEL_FORMAT_RGBA);
 	if(type == 2) sprite = Sprite::createSprite(glm::ivec2(32, 64), d, &spritesheet, &shaderProgram);
 	else if (type == 4) sprite = Sprite::createSprite(glm::ivec2(64, 32), d, &spritesheet, &shaderProgram);
+	else if (type == 5) sprite = Sprite::createSprite(glm::ivec2(224, 112), d, &spritesheet, &shaderProgram);
 	else sprite = Sprite::createSprite(glm::ivec2(32, 32), d, &spritesheet, &shaderProgram);
 	if (type == 1 || type == 3 || type == 2) { // KEYS BANDERA Y GLOBO NUBES
 		sprite->setNumberAnimations(3);

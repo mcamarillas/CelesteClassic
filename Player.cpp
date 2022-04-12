@@ -619,3 +619,11 @@ void Player::setInfDash(bool b)
 {
 	infiniteDash = b;
 }
+
+int Player::getResult() {
+	int result = 0;
+	for (int i = 0; i < 10; ++i) {
+		if (strawberries[i]) result += 1;
+	}
+	return result;
+}

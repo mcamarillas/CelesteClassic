@@ -99,15 +99,21 @@ void Scene::update(int deltaTime)
 				aux.y += 32;
 				background.createParticles("images/polvo2.png", aux, texProgram);
 			}
-			else if (player->getPolvillo() == 5) {
+			else if (player->getPolvillo() == 6) {
 				glm::vec2 aux = player->getPosition();
-				aux.y += 32;
+				aux.y -= 32;
 				background.createParticles("images/polvo2.png", aux, texProgram);
 			}
 		if (obj.endgamed()) {
 			obj.endendgame();
 			int x = player->getResult();
-			x = x;
+			if(x == 0) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo1.png", glm::vec2(1, 1), texProgram);
+			else if (x == 1) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo1.png", glm::vec2(1, 1), texProgram);
+			else if (x == 2) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo2.png", glm::vec2(1, 1), texProgram);
+			else if (x == 3) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo3.png", glm::vec2(1, 1), texProgram);
+			else if (x == 4) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo4.png", glm::vec2(1, 1), texProgram);
+			else if (x == 5) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo5.png", glm::vec2(1, 1), texProgram);
+			else if (x == 6) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo6.png", glm::vec2(1, 1), texProgram);
 			sceneEffects->play2D("sound/ending.wav", false);
 		}
 	background.updateBackground(deltaTime);
@@ -274,7 +280,6 @@ void Scene::changeLevel(int level) {
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level10.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
-		background.createParticles(player->getPosition(), texProgram);
 		s = "levels/level10.txt";
 		break;
 	case 11:

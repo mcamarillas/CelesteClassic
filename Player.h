@@ -35,6 +35,7 @@ public:
     void updateSB();
     void setLvl(int lvl);
     int getPolvillo();
+    int getResult();
 
 private:
     bool bJumping;
