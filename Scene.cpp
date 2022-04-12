@@ -61,27 +61,34 @@ void Scene::update(int deltaTime)
 {
 	
 	currentTime += deltaTime;
-	obj.paintObjects(deltaTime);
-	vector<glm::vec3> pos;
-	obj.getClouds(pos);
-	map->setCloudsCol(pos);
-	player->update(deltaTime);
-	if (obj.getStrawberry()) player->updateSB();
-	obj.checkCollisions(player->getPosition());
-	if (obj.isOpen()) {
-		glm::vec2 newPos = map->openCofre();
-		obj.createObject(12, 0, newPos, "images/fresita.png", glm::vec2(1, 1), texProgram);
-		obj.setOpen(false);
-	}
-	if (obj.isGlobo()) {
-		player->setDash(false);
-		obj.setGlobo(false);
-	}
-	glm::vec2 p;
-	if (map->getCreaFresa(p)) {
-		obj.createObject(1, 0, p, "images/fresita.png", glm::vec2(1, 1), texProgram);
-		map->setCreaFresa(false);
-	}
+	
+		obj.paintObjects(deltaTime);
+		vector<glm::vec3> pos;
+		obj.getClouds(pos);
+		map->setCloudsCol(pos);
+		player->update(deltaTime);
+		if (obj.getStrawberry()) player->updateSB();
+		obj.checkCollisions(player->getPosition());
+		if (obj.isOpen()) {
+			glm::vec2 newPos = map->openCofre();
+			obj.createObject(12, 0, newPos, "images/fresita.png", glm::vec2(1, 1), texProgram);
+			obj.setOpen(false);
+		}
+		if (obj.isGlobo()) {
+			player->setDash(false);
+			obj.setGlobo(false);
+		}
+		glm::vec2 p;
+		if (map->getCreaFresa(p)) {
+			obj.createObject(1, 0, p, "images/fresita.png", glm::vec2(1, 1), texProgram);
+			map->setCreaFresa(false);
+		}
+		if (obj.endgamed()) {
+			obj.endendgame();
+			int x = player->getResult();
+			x = x;
+			sceneEffects->play2D("sound/ending.wav", false);
+		}
 	background.updateBackground(deltaTime);
 	map->update();
 	player->setInfDash(infDash);
@@ -250,6 +257,8 @@ void Scene::changeLevel(int level) {
 		s = "levels/level10.txt";
 		break;
 	case 11:
+		stopMusic = true;
+		sceneBG->play2D("sound/endingBG.wav", false);
 		glClearColor(0.5254f, 0.1882f, 0.3294f, 1.0f);
 		background.setCloudColor("images/rosita.png");
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
@@ -258,8 +267,10 @@ void Scene::changeLevel(int level) {
 		lvl = level;
 		break;
 	}
+	if (level != 11) sceneBG->stopAllSounds();
 	player->setTileMap(map);
 }
+
 
 void Scene::changeInstrucctions() {
 		map = TileMap::createTileMap("levels/pauseScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);

@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "objectManager.h"
 #include "backgroundManager.h"
+using namespace irrklang;
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -34,6 +35,7 @@ public:
 	void changeMainMenu();
 	bool getInfDash();
 	void setInfDash(bool b);
+	bool getSM();
 
 private:
 	void initShaders();
@@ -47,8 +49,11 @@ private:
 	objectManager obj;
 	int lvl;
 	string s;
+	bool stopMusic = true;
 	bool infDash = false;
 	backgroundManager background;
+	ISoundEngine* sceneEffects = createIrrKlangDevice();
+	ISoundEngine* sceneBG = createIrrKlangDevice();
 };
 
 
