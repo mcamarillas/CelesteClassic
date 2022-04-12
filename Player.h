@@ -34,6 +34,7 @@ public:
     void initStrawberries();
     void updateSB();
     void setLvl(int lvl);
+    int getPolvillo();
 
 private:
     bool bJumping;
@@ -46,6 +47,7 @@ private:
     bool infiniteDash;
     bool isCloud;
     bool strawberries[10];
+    int polvillo = 0;
     glm::ivec2 tileMapDispl, posPlayer;
     int jumpAngle, dashAngle, startY, specialMove, dashX, dashY;
     Texture spritesheet;

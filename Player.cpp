@@ -95,6 +95,11 @@ void Player::setLvl(int lvl) {
 	this->lvl = lvl;
 }
 
+int Player::getPolvillo()
+{
+	return polvillo;
+}
+
 void Player::updateSB() {
 	strawberries[lvl-1] = true;
 }
@@ -211,17 +216,17 @@ void Player::updateJump()
 	bool lCol = map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32));
 	posPlayer.x += SPEEDX;
 	if (Game::instance().getKey('c') && !cPressed && rCol && jumpAngle > 32) {
+		polvillo = 1;
 		cPressed = true;
 		rightJump();
 	}
 	//ACTIVATE SPECIAL RIGHT JUMP	
 	else if (Game::instance().getKey('c') && !cPressed && lCol && jumpAngle > 32) {
+		polvillo = 1;
 		cPressed = true;
 		leftJump();
 	}
-
-
-
+	else polvillo = 0;
 }
 
 bool Player::getUnderground() {
@@ -289,6 +294,7 @@ void Player::dash()
 	else if (dashY == 2) {
 		posPlayer.y += DASH_SPEED;
 		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
+			polvillo = 0;
 			specialMove = 0;
 		}
 	}
@@ -358,26 +364,39 @@ void Player::update(int deltaTime)
 			movementEffects->play2D("sound/dash.wav", false);
 			if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
+				polvillo = 5;
 				dashY = 1;
 			}
 			else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 			{
+				polvillo = 6;
 				dashY = 2;
 			}
 			else dashY = 0;
 			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 			{
+				polvillo = 4;
 				dashX = 1;
 			}
 			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 			{
+				polvillo = 3;
 				dashX = 2;
 			}
 			else if (dashY == 0) {
-				if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT) dashX = 1;
-				else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT) dashX = 2;
+				
+				if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT || sprite->animation() == JUMP_LEFT) {
+					polvillo = 4;
+					dashX = 1;
+				}
+				else if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT || sprite->animation() == JUMP_RIGHT) {
+					polvillo = 3;
+					dashX = 2;
+				}
 			}
-			else dashX = 0;
+			else {
+				dashX = 0;
+			}
 			specialMove = 3;
 			isDashing = true;
 			bJumping = false;
@@ -403,6 +422,7 @@ void Player::update(int deltaTime)
 		}
 		else
 		{
+			polvillo = 0;
 			//LEFT MOVEMENT
 			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 			{
@@ -470,10 +490,12 @@ void Player::update(int deltaTime)
 			if (sprite->animation() == DESLIZANDO2 && !leftCol) sprite->changeAnimation(STAND_LEFT);
 			else if (sprite->animation() == DESLIZANDO && !rightCol)	sprite->changeAnimation(STAND_RIGHT);
 			if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && rightCol && !downCol) {
+				polvillo = 2;
 				posPlayer.y -= FALL_STEP / 2;
 				sprite->changeAnimation(DESLIZANDO2);
 			}
 			else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && leftCol && !downCol) {
+				polvillo = 2;
 				posPlayer.y -= FALL_STEP / 2;
 				sprite->changeAnimation(DESLIZANDO);
 
@@ -484,11 +506,13 @@ void Player::update(int deltaTime)
 			if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
 
 				if (Game::instance().getKey('c') && !cPressed && rightCol && !upCol) {
+					polvillo = 1;
 					cPressed = true;
 					rightJump();
 
 				}
 				else if (Game::instance().getKey('c') && !cPressed && leftCol && !upCol) {
+					polvillo = 1;
 					cPressed = true;
 					leftJump();
 				}
@@ -497,14 +521,22 @@ void Player::update(int deltaTime)
 			}
 			// CUANDO ESTAS EN EL SUELO
 			else {
-
+				
 				if (sprite->animation() == DESLIZANDO2) sprite->changeAnimation(STAND_LEFT);
 				else if (sprite->animation() == DESLIZANDO)	sprite->changeAnimation(STAND_RIGHT);				
 
-				if (sprite->animation() == JUMP_LEFT) sprite->changeAnimation(STAND_LEFT);
-				else if (sprite->animation() == JUMP_RIGHT)	sprite->changeAnimation(STAND_RIGHT);
+				if (sprite->animation() == JUMP_LEFT) {
+					sprite->changeAnimation(STAND_LEFT);
+					polvillo = 1;
+				}
+				else if (sprite->animation() == JUMP_RIGHT) {
+					sprite->changeAnimation(STAND_RIGHT);
+					polvillo = 1;
+				}
+				else polvillo = 0;
 
 				if (map->getMolla()) {
+					polvillo = 1;
 					collisionEffects->play2D("sound/molla.wav", false);
 					isMolla = true;
 					bJumping = true;
@@ -527,6 +559,7 @@ void Player::update(int deltaTime)
 				}
 				if (Game::instance().getKey('c') && !cPressed)
 				{
+					polvillo = 1;
 					cPressed = true;
 					movementEffects->play2D("sound/jump.wav", false);
 					if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT)
