@@ -43,7 +43,6 @@ void Scene::resetLvl() {
 
 void Scene::init()
 {
-	
 	initShaders();
 	lvl = 0;
 	map = TileMap::createTileMap("levels/startScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -107,7 +106,7 @@ void Scene::render()
 	map->render();
 	obj.renderObjects();
 	player->render();
-	
+	background.renderParticles();
 	background.renderSnow();
 }
 
@@ -239,6 +238,7 @@ void Scene::changeLevel(int level) {
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level10.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		lvl = level;
+		background.createParticles(player->getPosition(), texProgram);
 		s = "levels/level10.txt";
 		break;
 	case 11:

@@ -16,6 +16,8 @@ public:
 	void setA(int A);
 	void setW(float w);
 	void changeColor(string s);
+	void updateParticles(int deltaTime);
+	void createParticles(string s, glm::vec2 position, ShaderProgram& shaderProgram);
 
 private:
 	int speed;

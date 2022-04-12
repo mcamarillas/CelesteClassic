@@ -36,6 +36,13 @@ void backgroundManager::setCloudColor(string s) {
 	}
 }
 
+void backgroundManager::createParticles(glm::vec2 pos, ShaderProgram& shaderProgram)
+{
+	Background* b = new Background();
+	b->createParticles("images/polvo.png", pos, shaderProgram);
+	particles[0] = b;
+}
+
 void backgroundManager::updateBackground(int deltaTime) {
 	for (std::map<int, Background*>::iterator it = backgrounds.begin(); it != backgrounds.end(); ++it) {
 		it->second->updateX();
@@ -45,6 +52,9 @@ void backgroundManager::updateBackground(int deltaTime) {
 		it->second->updateX();
 		it->second->updateYSnow();
 		it->second->update(deltaTime);
+	}
+	for (std::map<int, Background*>::iterator it = particles.begin(); it != particles.end(); ++it) {
+		it->second->updateParticles(deltaTime);
 	}
 }
 
@@ -57,6 +67,12 @@ void backgroundManager::renderBackground() {
 
 void backgroundManager::renderSnow() {
 	for (std::map<int, Background*>::iterator it = snows.begin(); it != snows.end(); ++it) {
+		it->second->render();
+	}
+}
+
+void backgroundManager::renderParticles() {
+	for (std::map<int, Background*>::iterator it = particles.begin(); it != particles.end(); ++it) {
 		it->second->render();
 	}
 }
