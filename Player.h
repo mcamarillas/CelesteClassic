@@ -36,6 +36,7 @@ private:
     bool bJumping;
     bool cPressed;
     bool isDashing;
+    void Yanimations();
     bool leftCol, rightCol, downCol, upCol;
     bool underGround = false;
     bool nextLvl = false;

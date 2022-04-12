@@ -93,13 +93,17 @@ void Player::moveLeft()
 	if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 	{
 		posPlayer += SPEEDX;
-		sprite->changeAnimation(DESLIZANDO);
+		if (!downCol && Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+		{
+			sprite->changeAnimation(DESLIZANDO);
+		}
 		specialMove = 0;
 	}
+	else sprite->changeAnimation(JUMP_LEFT);
 	if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
 	{
 		specialMove = 0;
-		sprite->changeAnimation(STAND_LEFT);
+		if(!downCol)sprite->changeAnimation(STAND_LEFT);
 	}
 }
 void Player::moveRight()
@@ -108,9 +112,12 @@ void Player::moveRight()
 	if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 	{
 		posPlayer -= SPEEDX;
-		sprite->changeAnimation(DESLIZANDO2);
+		if (!downCol && Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) {
+			sprite->changeAnimation(DESLIZANDO2);
+		}
 		specialMove = 0;
 	}
+	else sprite->changeAnimation(JUMP_RIGHT);
 	if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
 	{
 		specialMove = 0;
@@ -170,6 +177,8 @@ void Player::updateJump()
 {
 	//UPDATE JUMP DISTANCE
 	jumpAngle += JUMP_ANGLE_STEP;
+	if (sprite->animation() == DESLIZANDO && !leftCol) sprite->changeAnimation(JUMP_LEFT);
+	else if (sprite->animation() == DESLIZANDO2 && !rightCol)	sprite->changeAnimation(JUMP_RIGHT);
 	//IF JUMP ENDED REINITIALIZE VARIABLES (CREATE FUNCTION)
 	if (jumpAngle >= 180)
 	{
@@ -261,7 +270,7 @@ void Player::dash()
 		posPlayer.y -= DASH_SPEED;
 		if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
 			specialMove = 0;
-			posPlayer.y += 2 * DASH_SPEED;
+			posPlayer.y += 5 * DASH_SPEED;
 		}
 	}
 	else if (dashY == 2) {
@@ -278,13 +287,8 @@ void Player::dash()
 	}
 }
 
-
-void Player::update(int deltaTime)
-{
-
-	sprite->update(deltaTime);
-
-	if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
+void Player::Yanimations() {
+	if (Game::instance().getSpecialKey(GLUT_KEY_UP) && downCol) {
 		if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT) sprite->changeAnimation(STAND_UP);
 		else if (sprite->animation() != STAND_UP)sprite->changeAnimation(STAND_UP2);
 	}
@@ -292,7 +296,7 @@ void Player::update(int deltaTime)
 		if (sprite->animation() == STAND_UP) sprite->changeAnimation(STAND_RIGHT);
 		else if (sprite->animation() == STAND_UP2) sprite->changeAnimation(STAND_LEFT);
 	}
-	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && downCol) {
 		if (sprite->animation() == MOVE_RIGHT || sprite->animation() == STAND_RIGHT) sprite->changeAnimation(STAND_DOWN);
 		else if (sprite->animation() != STAND_DOWN)sprite->changeAnimation(STAND_DOWN2);
 	}
@@ -300,6 +304,14 @@ void Player::update(int deltaTime)
 		if (sprite->animation() == STAND_DOWN) sprite->changeAnimation(STAND_RIGHT);
 		else if (sprite->animation() == STAND_DOWN2) sprite->changeAnimation(STAND_LEFT);
 	}
+}
+
+
+void Player::update(int deltaTime)
+{
+
+	sprite->update(deltaTime);
+	Yanimations();
 	if (Game::instance().getKey('g')) {
 		if (god) god = false;
 		else god = true;
@@ -378,6 +390,7 @@ void Player::update(int deltaTime)
 			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 			{
 				if (sprite->animation() != MOVE_LEFT && !bJumping) sprite->changeAnimation(MOVE_LEFT);
+				if (sprite->animation() == JUMP_RIGHT) sprite->changeAnimation(JUMP_LEFT);
 				posPlayer.x -= SPEEDX;
 				if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 				{
@@ -391,6 +404,7 @@ void Player::update(int deltaTime)
 			{
 				if (sprite->animation() != MOVE_RIGHT && !bJumping) sprite->changeAnimation(MOVE_RIGHT);
 				posPlayer.x += SPEEDX;
+				if (sprite->animation() == JUMP_LEFT) sprite->changeAnimation(JUMP_RIGHT);
 				if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 				{
 					posPlayer.x -= SPEEDX;
@@ -429,19 +443,34 @@ void Player::update(int deltaTime)
 		{
 			// CUANDO ESTAS CAYENDO
 			posPlayer.y += FALL_STEP;
+
+			if (sprite->animation() == DESLIZANDO2 && !leftCol) sprite->changeAnimation(STAND_LEFT);
+			else if (sprite->animation() == DESLIZANDO && !rightCol)	sprite->changeAnimation(STAND_RIGHT);
+			if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && rightCol && !downCol) sprite->changeAnimation(DESLIZANDO2);
+			else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && leftCol && !downCol) sprite->changeAnimation(DESLIZANDO);
+
+			
+			
 			if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
 
 				if (Game::instance().getKey('c') && !cPressed && rightCol && !upCol) {
 					cPressed = true;
 					rightJump();
+
 				}
 				else if (Game::instance().getKey('c') && !cPressed && leftCol && !upCol) {
 					cPressed = true;
 					leftJump();
 				}
+					
+				
 			}
 			// CUANDO ESTAS EN EL SUELO
 			else {
+
+				if (sprite->animation() == DESLIZANDO2) sprite->changeAnimation(STAND_LEFT);
+				else if (sprite->animation() == DESLIZANDO)	sprite->changeAnimation(STAND_RIGHT);				
+
 				if (sprite->animation() == JUMP_LEFT) sprite->changeAnimation(STAND_LEFT);
 				else if (sprite->animation() == JUMP_RIGHT)	sprite->changeAnimation(STAND_RIGHT);
 
@@ -479,6 +508,7 @@ void Player::update(int deltaTime)
 					jumpAngle = 0;
 					startY = posPlayer.y;
 				}
+				Yanimations();
 			}
 		}
 	}
