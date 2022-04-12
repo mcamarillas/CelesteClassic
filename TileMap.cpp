@@ -174,6 +174,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size)
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
+		destroyWall(x, y);
 		if (count(spikesX.begin(), spikesX.end(), map[(y)*mapSize.x + x])) spikes = true;
 		if(!count(nonCollisionableBlock.begin(), nonCollisionableBlock.end(), map[y*mapSize.x + x]))
 			return true;
@@ -191,6 +192,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size)
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
+		destroyWall(x, y);
 		if(!count(nonCollisionableBlock.begin(), nonCollisionableBlock.end(), map[y*mapSize.x + x]))
 			return true;
 		if (map[(y)*mapSize.x + x] == 68) {
@@ -233,6 +235,7 @@ bool TileMap::collisionMoveDown(glm::ivec2& pos, const glm::ivec2& size, int* po
 
 	for (int x = x0; x <= x1; x++)
 	{
+		destroyWall(x, y);
 		if (!count(nonCollisionableBlock.begin(), nonCollisionableBlock.end(), map[y * mapSize.x + x]) || map[y * mapSize.x + x] == 76)
 		{
 			if (*posY - tileSize * y + size.y < 32)
@@ -306,8 +309,9 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	r = *posY / tileSize - 1;
 	for (int x = x0; x <= x1; x++)
 	{
+		destroyWall(x, y - 1);
 		if (!count(nonCollisionableBlock.begin(), nonCollisionableBlock.end(), map[(y - 1)*mapSize.x + x]))
-		{
+		{			
 			int a = *posY;
 			int b = tileSize * (y-1) + size.y;
 			if (a < b)
@@ -378,6 +382,57 @@ void TileMap::update() {
 		}
 	}
 	if(destroy) destroyFloor();
+}
+
+void TileMap::destroyWall(int x, int y) {
+	if (map[y * mapSize.x + x] == 30) {
+		map[y * mapSize.x + x] = 0;
+		map[y * mapSize.x + x - 1] = 0;
+		map[(y-1) * mapSize.x + x] = 33;
+		map[(y-1) * mapSize.x + x - 1] = 26;
+		creaFresa = true;
+		prepareArrays(mPos, texProgram);
+		posFresa = glm::vec2(x - 0.5, y - 2);
+	}
+	else if (map[y * mapSize.x + x] == 29) {
+		map[y * mapSize.x + x] = 0;
+		map[y * mapSize.x + x + 1] = 0;
+		map[(y - 1) * mapSize.x + x] = 26;
+		map[(y - 1) * mapSize.x + x + 1] = 33;
+		creaFresa = true;
+		prepareArrays(mPos, texProgram);
+		posFresa = glm::vec2(x + 0.5, y - 2);
+	}
+	else if (map[y * mapSize.x + x] == 23) {
+		map[y * mapSize.x + x] = 33;
+		map[y * mapSize.x + x - 1] = 26;
+		map[(y + 1) * mapSize.x + x] = 0;
+		map[(y + 1) * mapSize.x + x - 1] = 0;
+		creaFresa = true;
+		prepareArrays(mPos, texProgram);
+		posFresa = glm::vec2(x - 0.5, y - 1);
+	}
+	else if (map[y * mapSize.x + x] == 22) {
+		map[y * mapSize.x + x] = 26;
+		map[y * mapSize.x + x + 1] = 33;
+		map[(y + 1) * mapSize.x + x] = 0;
+		map[(y + 1) * mapSize.x + x + 1] = 0;
+		creaFresa = true;
+		prepareArrays(mPos, texProgram);
+		posFresa = glm::vec2(x - 0.5, y - 1);
+	}
+	
+}
+
+bool TileMap::getCreaFresa(glm::vec2 &pos)
+{
+	pos = posFresa;
+	return creaFresa;
+}
+
+void TileMap::setCreaFresa(bool b)
+{
+	creaFresa = b;
 }
 
 

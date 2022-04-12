@@ -42,6 +42,9 @@ public:
 	void destroyFloor();
 	void changeCoords(glm::vec2 pos);
 	void setCloudsCol(vector<glm::vec3>& pos);
+	void destroyWall(int x, int y);
+	bool getCreaFresa(glm::vec2 &pos);
+	void setCreaFresa(bool b);
 private:
 	bool loadLevel(const string &levelFile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
@@ -56,11 +59,13 @@ private:
 	int tileSize, blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
+	glm::vec2 posFresa;
 	int *map, *mapAux, *ticks;
 	bool spikes = false;
 	bool molla = false;
 	bool updateMap = false;
 	bool destroy = false;
+	bool creaFresa = false;
 	glm::vec2 mPos;
 	ShaderProgram texProgram;
 	int countt = 0;
