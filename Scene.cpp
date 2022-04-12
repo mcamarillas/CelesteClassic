@@ -83,6 +83,27 @@ void Scene::update(int deltaTime)
 			obj.createObject(1, 0, p, "images/fresita.png", glm::vec2(1, 1), texProgram);
 			map->setCreaFresa(false);
 		}
+			if (player->getPolvillo() == 1) background.createParticles("images/polvo.png", player->getPosition(), texProgram);
+			else if (player->getPolvillo() == 3) {
+				glm::vec2 aux = player->getPosition();
+				aux.x -= 32;
+				background.createParticles("images/polvo2.png", aux, texProgram);
+			}
+			else if (player->getPolvillo() == 4) {
+				glm::vec2 aux = player->getPosition();
+				aux.x += 32;
+				background.createParticles("images/polvo2.png", aux, texProgram);
+			}
+			else if (player->getPolvillo() == 5) {
+				glm::vec2 aux = player->getPosition();
+				aux.y += 32;
+				background.createParticles("images/polvo2.png", aux, texProgram);
+			}
+			else if (player->getPolvillo() == 5) {
+				glm::vec2 aux = player->getPosition();
+				aux.y += 32;
+				background.createParticles("images/polvo2.png", aux, texProgram);
+			}
 		if (obj.endgamed()) {
 			obj.endendgame();
 			int x = player->getResult();

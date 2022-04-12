@@ -23,6 +23,8 @@ public:
 	void getClouds(vector<glm::vec3> &pos);
 	bool cloudCol(glm::ivec2 pos);
 	bool getStrawberry();
+	bool endgamed();
+	void endendgame();
 
 private:
 	map<int,Object*> objects;
@@ -30,6 +32,7 @@ private:
 	bool open = false;
 	bool globo = false;
 	bool SWcaught = false;
+	bool endgame = false;
 
 };
 

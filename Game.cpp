@@ -8,7 +8,7 @@
 void Game::init()
 {
 	bPlay = true;
-	soundTrack->play2D("sound/st1.wav", false);
+	soundTrack->play2D("sound/st1.wav", true);
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	scene.init();
 	speed = 1;

@@ -72,9 +72,7 @@ bool Object::hasCollisioned(glm::vec2 playerPos) {
 	int rangX1 = position.x + 30;
 	int rangY0 = position.y + 62;
 	int rangY1 = position.y;
-	if (type == 3) {
-	}
-	else if (type != 4){
+	if (type != 4) {
 		if (playerPos.x > rangX0 && playerPos.x < rangX1 && playerPos.y < rangY0 && playerPos.y > rangY1) {
 			if (type == 1) {
 				goalEffects->play2D("sound/key.wav", false);
@@ -84,6 +82,9 @@ bool Object::hasCollisioned(glm::vec2 playerPos) {
 			}
 			else if (type == 2) {
 				goalEffects->play2D("sound/strawBerry.wav", false);
+			}
+			else if (type == 3) {
+				return true;
 			}
 			return true;
 		}
