@@ -14,7 +14,7 @@ using namespace irrklang;
 // Game is a singleton (a class with a single instance) that represents our whole application
 
 
-enum Mode { MENU, INSTRUCTIONS, GAME, CREDITS };
+enum class Mode { MENU, INSTRUCTIONS, GAME, CREDITS };
 
 class Game
 {
@@ -55,7 +55,7 @@ private:
 	Scene scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	ISoundEngine* soundTrack = createIrrKlangDevice();
-	Mode mode = MENU;
+	Mode mode = Mode::MENU;
 	float speed;
 };
 

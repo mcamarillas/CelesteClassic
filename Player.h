@@ -43,7 +43,7 @@ private:
     bool xPressed;
     bool isDashing;
     void Yanimations();
-    bool leftCol, rightCol, downCol, upCol;
+    bool leftCol = false, rightCol = false, downCol = false, upCol = false;
     bool underGround = false;
     bool nextLvl = false;
     bool infiniteDash;

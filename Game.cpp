@@ -22,8 +22,8 @@ float Game::getSpeed() {
 
 bool Game::update(int deltaTime)
 {
-	scene.update(deltaTime);
-	if (scene.getFlag()) mode = MENU;
+
+	if (scene.getFlag()) mode = Mode::MENU;
 	if (scene.getSM()) {
 		soundTrack->stopAllSounds();
 		soundTrack->play2D("sound/endingBG.wav", true);
@@ -45,7 +45,7 @@ bool Game::update(int deltaTime)
 	else if (scene.isdead()) {
 		scene.respawn();
 	}
-	
+	scene.update(deltaTime);
 	level = scene.getLvl();
 	return bPlay;
 }
@@ -60,18 +60,18 @@ void Game::keyPressed(int key)
 {
 	if (key == 27) // Escape code
 		bPlay = false;
-	else if (key == 'i' && mode == MENU) {
+	else if (key == 'i' && mode == Mode::MENU) {
 		scene.changeInstrucctions();
-		mode = INSTRUCTIONS;
+		mode = Mode::INSTRUCTIONS;
 	}
-	else if (key == 'c' && mode == MENU) {
+	else if (key == 'c' && mode == Mode::MENU) {
 		if (level == 11) {
 			level = 0;
 			soundTrack->stopAllSounds();
 			soundTrack->play2D("sound/mm.wav", true);
 		}
 		scene.changeCredits();
-		mode = CREDITS;
+		mode = Mode::CREDITS;
 	}
 	if (key == 'q') {
 		if (level == 11) {
@@ -79,17 +79,17 @@ void Game::keyPressed(int key)
 			soundTrack->stopAllSounds();
 			soundTrack->play2D("sound/mm.wav", true);
 		}
-		if (mode == GAME) {
+		if (mode == Mode::GAME) {
 			soundTrack->stopAllSounds();
 			soundTrack->play2D("sound/mm.wav", true);
 		}
 		scene.changeMainMenu();		
-		mode = MENU;
+		mode = Mode::MENU;
 	}
-	else if (key == 'p' && mode == MENU) {
+	else if (key == 'p' && mode == Mode::MENU) {
 		level = prevLvl;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		soundTrack->stopAllSounds();
 		soundTrack->play2D("sound/st1.wav", true);
 	}
@@ -101,9 +101,9 @@ void Game::keyPressed(int key)
 		bool b = scene.getInfDash();
 		scene.setInfDash(!b);
 	}
-	else if (mode != CREDITS && mode != INSTRUCTIONS){
-		if (mode == MENU) {
-			mode = GAME;
+	else if (mode != Mode::CREDITS && mode != Mode::INSTRUCTIONS){
+		if (mode == Mode::MENU) {
+			mode = Mode::GAME;
 			soundTrack->stopAllSounds();
 			soundTrack->play2D("sound/st1.wav", true);
 		}
@@ -111,67 +111,67 @@ void Game::keyPressed(int key)
 		level = 1;
 		prevLvl = 1;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		}
 		else if (key == '2') {
 		level = 2;
 		prevLvl = 2;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		}
 		else if (key == '3') {
 		level = 3;
 		prevLvl = 3;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		}
 		else if (key == '4') {
 		level = 4;
 		prevLvl = 4;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		}
 		else if (key == '5') {
 		level = 5;
 		prevLvl = 5;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		}
 		else if (key == '6') {
 		level = 6;
 		prevLvl = 6;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		}
 		else if (key == '7') {
 		level = 7;
 		prevLvl = 7;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		}
 		else if (key == '8') {
 		level = 8;
 		prevLvl = 8;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		}
 		else if (key == '9') {
 		level = 9;
 		prevLvl = 9;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		}
 		else if (key == '0') {
 		level = 10;
 		prevLvl = 10;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		}
 		else if (key == 'f') {
 		level = 11;
 		prevLvl = 11;
 		change = true;
-		mode = GAME;
+		mode = Mode::GAME;
 		}
 	}
 	
@@ -187,7 +187,7 @@ void Game::keyReleased(int key)
 
 void Game::specialKeyPressed(int key)
 {
-	if (mode == GAME) {
+	if (mode == Mode::GAME) {
 		specialKeys[key] = true;
 	}
 }
