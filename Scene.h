@@ -36,6 +36,9 @@ public:
 	bool getInfDash();
 	void setInfDash(bool b);
 	bool getSM();
+	void resetEnd();
+	bool getEnd();
+	bool getFlag();
 
 private:
 	void initShaders();
@@ -49,8 +52,10 @@ private:
 	objectManager obj;
 	int lvl;
 	string s;
-	bool stopMusic = true;
+	bool end = false;
 	bool infDash = false;
+	bool stopMusic = false;
+	bool flagCaught = false;
 	backgroundManager background;
 	ISoundEngine* sceneEffects = createIrrKlangDevice();
 	ISoundEngine* sceneBG = createIrrKlangDevice();

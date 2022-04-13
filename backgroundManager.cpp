@@ -36,15 +36,18 @@ void backgroundManager::setCloudColor(string s) {
 	}
 }
 
-void backgroundManager::createParticles(string s,glm::vec2 pos, ShaderProgram& shaderProgram)
+void backgroundManager::createParticles(string s, glm::vec2 pos, ShaderProgram& shaderProgram)
 {
 	Background* b = new Background();
-	b->createParticles(s, glm::vec2(pos.x,pos.y-32), shaderProgram);
+	b->createParticles(s, glm::vec2(pos.x, pos.y - 32), shaderProgram);
 	b->setTicks(0);
-	if (particles.find(0) == particles.end()) particles[0] = b;
+	if (s == "images/points.png")  particles[99] = b;
+	else if (s == "images/muerte2.png") particles[100] = b;
+	else if (particles.find(0) == particles.end()) particles[0] = b;
 	else if (particles.find(1) == particles.end()) particles[1] = b;
 	else if (particles.find(2) == particles.end()) particles[2] = b;
 	else particles[3] = b;
+
 }
 
 void backgroundManager::updateBackground(int deltaTime) {

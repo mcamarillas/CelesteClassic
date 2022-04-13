@@ -34,8 +34,54 @@ bool Scene::nextLvl() {
 }
 
 void Scene::respawn() {
+	switch (lvl) {
+	case 1:
+		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+		break;
+	case 2:
+		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES + 2) * map->getTileSize()));
+		break;
+	case 3:
+		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
+		break;
+	case 4:
+		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+		break;
+	case 5:
+		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 1) * map->getTileSize()));
+		break;
+	case 6:
+		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 1) * map->getTileSize()));
+		obj.createObject(1, 2, glm::vec2(9, 8), "images/globo.png", glm::vec2(1. / 3, 1), texProgram);
+		break;
+	case 7:
+		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
+		break;
+	case 8:
+		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES + 2) * map->getTileSize()));
+		obj.createObject(1, 2, glm::vec2(7, 4), "images/globo.png", glm::vec2(1. / 3, 1), texProgram);
+		break;
+	case 9:
+		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 2) * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+		obj.createObject(1, 2, glm::vec2(8, 4), "images/globo.png", glm::vec2(1. / 3, 1), texProgram);
+		obj.createObject(2, 2, glm::vec2(4.5, 4), "images/globo.png", glm::vec2(1. / 3, 1), texProgram);
+		break;
+	case 10:
+		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
+		break;
+	case 11:
+		stopMusic = true;
+		sceneBG->play2D("sound/endingBG.wav", false);
+		glClearColor(0.5254f, 0.1882f, 0.3294f, 1.0f);
+		background.setCloudColor("images/rosita.png");
+		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
+		map = TileMap::createTileMap("levels/final.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+
+		break;
+	}
 	player->respawn();
 }
+
 
 void Scene::resetLvl() {
 	player->resetLvl();
@@ -57,19 +103,29 @@ void Scene::init()
 	currentTime = 0.0f;
 }
 
+bool Scene::getSM() {
+	bool b = stopMusic;
+	stopMusic = false;
+	return b;
+}
+
 void Scene::update(int deltaTime)
 {
 	
 	currentTime += deltaTime;
-	
 		obj.paintObjects(deltaTime);
 		vector<glm::vec3> pos;
 		obj.getClouds(pos);
 		map->setCloudsCol(pos);
 		player->update(deltaTime);
-		if(player->getUnderground()) background.createParticles("images/muerte.png", player->getPosition(), texProgram);
+		if (player->getUnderground()) {
+			glm::vec2 aux = player->getPosition();
+			aux.x -= 64;
+			aux.y -= 64;
+			background.createParticles("images/muerte2.png", aux, texProgram);
+		}
 		if (obj.getStrawberry()) {
-			//background.createParticles("images/polvo2.png", aux, texProgram);
+			background.createParticles("images/points.png", obj.getPos(), texProgram);
 			player->updateSB();
 		}
 		obj.checkCollisions(player->getPosition());
@@ -111,19 +167,28 @@ void Scene::update(int deltaTime)
 		if (obj.endgamed()) {
 			obj.endendgame();
 			int x = player->getResult();
+			lvl == 11;
+			//sto1pMusic = true;
 			if(x == 0) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo0.png", glm::vec2(1, 1), texProgram);
-			else if (x == 1) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo1.png", glm::vec2(1, 1), texProgram);
-			else if (x == 2) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo2.png", glm::vec2(1, 1), texProgram);
-			else if (x == 3) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo3.png", glm::vec2(1, 1), texProgram);
-			else if (x == 4) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo4.png", glm::vec2(1, 1), texProgram);
-			else if (x == 5) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo5.png", glm::vec2(1, 1), texProgram);
-			else if (x == 6) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo6.png", glm::vec2(1, 1), texProgram);
+			else if (x == 1) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo1.png", glm::vec2(1, 1), texProgram);
+			else if (x == 2) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo2.png", glm::vec2(1, 1), texProgram);
+			else if (x == 3) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo3.png", glm::vec2(1, 1), texProgram);
+			else if (x == 4) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo4.png", glm::vec2(1, 1), texProgram);
+			else if (x == 5) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo5.png", glm::vec2(1, 1), texProgram);
+			else if (x == 6) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo6.png", glm::vec2(1, 1), texProgram);
 			sceneEffects->play2D("sound/ending.wav", false);
+			flagCaught = true;
 		}
 	background.updateBackground(deltaTime);
 	map->update();
 	player->setInfDash(infDash);
 	
+}
+
+bool Scene::getFlag() {
+	bool b = flagCaught;
+	flagCaught = false;
+	return b;
 }
 
 void Scene::render()
@@ -201,6 +266,15 @@ void Scene::initShaders()
 	vShader.free();
 	fShader.free();
 }
+
+bool Scene::getEnd() {
+	return end;
+}
+
+void Scene::resetEnd() {
+	end = false;
+}
+
 
 void Scene::changeLevel(int level) {
 	obj.deleteObjects();
@@ -288,7 +362,7 @@ void Scene::changeLevel(int level) {
 		break;
 	case 11:
 		stopMusic = true;
-		sceneBG->play2D("sound/endingBG.wav", false);
+		end = true;
 		glClearColor(0.5254f, 0.1882f, 0.3294f, 1.0f);
 		background.setCloudColor("images/rosita.png");
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
@@ -303,10 +377,14 @@ void Scene::changeLevel(int level) {
 
 
 void Scene::changeInstrucctions() {
+	player->setPosition(glm::vec2(-1001, 100));
+	obj.deleteObjects();
 		map = TileMap::createTileMap("levels/pauseScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 }
 
 void Scene::changeCredits() {
+	player->setPosition(glm::vec2(-1001, 100));
+	obj.deleteObjects();
 	map = TileMap::createTileMap("levels/creditsScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 }
 

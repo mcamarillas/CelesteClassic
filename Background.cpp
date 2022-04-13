@@ -25,7 +25,8 @@ void Background::createParticles(string s, glm::vec2 position, ShaderProgram& sh
 	y = position.y;
 	shader = shaderProgram;
 	spritesheet.loadFromFile(s, TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::vec2(32,32), glm::vec2(1./4, 1), &spritesheet, &shaderProgram);
+	if (s == "images/muerte2.png") sprite = Sprite::createSprite(glm::vec2(160, 160), glm::vec2(1. / 4, 1), &spritesheet, &shaderProgram);
+	else sprite = Sprite::createSprite(glm::vec2(32, 32), glm::vec2(1. / 4, 1), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 	sprite->setAnimationSpeed(0, 4);
 	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));

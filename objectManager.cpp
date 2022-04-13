@@ -42,10 +42,17 @@ bool objectManager::endgamed() {
 	return endgame;
 }
 
+glm::vec2 objectManager::getPos() {
+	return pos;
+}
+
 void objectManager::checkCollisions(glm::vec2 posPlayer) {
 	for (std::map<int, Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
 		if (it->second->hasCollisioned(posPlayer)) {
-			if (it->second->getType() == 0) SWcaught = true;
+			if (it->second->getType() == 0) {
+				SWcaught = true;
+				pos = it->second->getPosition();
+			}
 			if (it->second->getType() == 1) open = true;
 			if (it->second->getType() == 2) globo = true;
 			if (it->second->getType() == 3) endgame = true;

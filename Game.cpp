@@ -8,7 +8,7 @@
 void Game::init()
 {
 	bPlay = true;
-	soundTrack->play2D("sound/st1.wav", true);
+	soundTrack->play2D("sound/mm.wav", true);
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	scene.init();
 	speed = 1;
@@ -23,15 +23,26 @@ float Game::getSpeed() {
 bool Game::update(int deltaTime)
 {
 
-		
-	
+	if (scene.getFlag()) mode = MENU;
+	if (scene.getSM()) {
+		soundTrack->stopAllSounds();
+		soundTrack->play2D("sound/endingBG.wav", true);
+	}
 	if (scene.nextLvl()) {
 		scene.resetLvl();
 		scene.changeLevel(level+1);
 	}
-	else if (change || scene.isdead()) {
+	else if (change) {
+		if (scene.getEnd()) {
+			soundTrack->stopAllSounds();
+			soundTrack->play2D("sound/st1.wav", true);
+			scene.resetEnd();
+		}
 		scene.changeLevel(level);
 		change = false;
+		
+	}
+	else if (scene.isdead()) {
 		scene.respawn();
 	}
 	scene.update(deltaTime);
@@ -49,88 +60,38 @@ void Game::keyPressed(int key)
 {
 	if (key == 27) // Escape code
 		bPlay = false;
-	else if (key == '1') {
-		level = 1;
-		prevLvl = 1;
-		change = true;
-		mode = GAME;
-	}
-	else if (key == '2') {
-		level = 2;
-		prevLvl = 2;
-		change = true;
-		mode = GAME;
-	}
-	else if (key == '3') {
-		level = 3;
-		prevLvl = 3;
-		change = true;
-		mode = GAME;
-	}
-	else if (key == '4') {
-		level = 4;
-		prevLvl = 4;
-		change = true;
-		mode = GAME;
-	}
-	else if (key == '5') {
-		level = 5;
-		prevLvl = 5;
-		change = true;
-		mode = GAME;
-	}
-	else if (key == '6') {
-		level = 6;
-		prevLvl = 6;
-		change = true;
-		mode = GAME;
-	}
-	else if (key == '7') {
-		level = 7;
-		prevLvl = 7;
-		change = true;
-		mode = GAME;
-	}
-	else if (key == '8') {
-		level = 8;
-		prevLvl = 8;
-		change = true;
-		mode = GAME;
-	}
-	else if (key == '9') {
-		level = 9;
-		prevLvl = 9;
-		change = true;
-		mode = GAME;
-	}
-	else if (key == '0') {
-		level = 10;
-		prevLvl = 10;
-		change = true;
-		mode = GAME;
-	}
-	else if (key == 'f') {
-		level = 11;
-		prevLvl = 11;
-		change = true;
-		mode = GAME;
-	}
 	else if (key == 'i' && mode == MENU) {
 		scene.changeInstrucctions();
 		mode = INSTRUCTIONS;
 	}
 	else if (key == 'c' && mode == MENU) {
+		if (level == 11) {
+			level = 0;
+			soundTrack->stopAllSounds();
+			soundTrack->play2D("sound/mm.wav", true);
+		}
 		scene.changeCredits();
 		mode = CREDITS;
 	}
 	else if (key == 'q') {
-		scene.changeMainMenu();
-			mode = MENU;
+		if (level == 11) {
+			level = 0;
+			soundTrack->stopAllSounds();
+			soundTrack->play2D("sound/mm.wav", true);
+		}
+		if (mode == GAME) {
+			soundTrack->stopAllSounds();
+			soundTrack->play2D("sound/mm.wav", true);
+		}
+		scene.changeMainMenu();		
+		mode = MENU;
 	}
 	else if (key == 'p' && mode == MENU) {
 		level = prevLvl;
 		change = true;
 		mode = GAME;
+		soundTrack->stopAllSounds();
+		soundTrack->play2D("sound/st1.wav", true);
 	}
 	else if (key == 's') {
 		if (speed == 1) speed = 0.5;
@@ -140,6 +101,81 @@ void Game::keyPressed(int key)
 		bool b = scene.getInfDash();
 		scene.setInfDash(!b);
 	}
+	else if (mode != CREDITS && mode != INSTRUCTIONS){
+		if (mode == MENU) {
+			mode = GAME;
+			soundTrack->stopAllSounds();
+			soundTrack->play2D("sound/st1.wav", true);
+		}
+		if (key == '1') {
+		level = 1;
+		prevLvl = 1;
+		change = true;
+		mode = GAME;
+		}
+		else if (key == '2') {
+		level = 2;
+		prevLvl = 2;
+		change = true;
+		mode = GAME;
+		}
+		else if (key == '3') {
+		level = 3;
+		prevLvl = 3;
+		change = true;
+		mode = GAME;
+		}
+		else if (key == '4') {
+		level = 4;
+		prevLvl = 4;
+		change = true;
+		mode = GAME;
+		}
+		else if (key == '5') {
+		level = 5;
+		prevLvl = 5;
+		change = true;
+		mode = GAME;
+		}
+		else if (key == '6') {
+		level = 6;
+		prevLvl = 6;
+		change = true;
+		mode = GAME;
+		}
+		else if (key == '7') {
+		level = 7;
+		prevLvl = 7;
+		change = true;
+		mode = GAME;
+		}
+		else if (key == '8') {
+		level = 8;
+		prevLvl = 8;
+		change = true;
+		mode = GAME;
+		}
+		else if (key == '9') {
+		level = 9;
+		prevLvl = 9;
+		change = true;
+		mode = GAME;
+		}
+		else if (key == '0') {
+		level = 10;
+		prevLvl = 10;
+		change = true;
+		mode = GAME;
+		}
+		else if (key == 'f') {
+		level = 11;
+		prevLvl = 11;
+		change = true;
+		mode = GAME;
+		}
+	}
+	
+	
 	keys[key] = true;
 }
 

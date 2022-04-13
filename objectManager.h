@@ -25,6 +25,7 @@ public:
 	bool getStrawberry();
 	bool endgamed();
 	void endendgame();
+	glm::vec2 getPos();
 
 private:
 	map<int,Object*> objects;
@@ -33,6 +34,7 @@ private:
 	bool globo = false;
 	bool SWcaught = false;
 	bool endgame = false;
+	glm::vec2 pos;
 
 };
 
