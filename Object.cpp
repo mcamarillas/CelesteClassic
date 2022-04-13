@@ -87,7 +87,7 @@ bool Object::hasCollisioned(glm::vec2 playerPos) {
 				goalEffects->play2D("sound/strawBerry.wav", false);
 			}
 			else if (type == 2) {
-				goalEffects->play2D("sound/strawBerry.wav", false);
+				goalEffects->play2D("sound/balloon.wav", false);
 			}
 			else if (type == 3) {
 				return true;
