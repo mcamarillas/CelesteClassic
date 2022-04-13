@@ -22,7 +22,7 @@ float Game::getSpeed() {
 
 bool Game::update(int deltaTime)
 {
-
+	scene.update(deltaTime);
 	if (scene.getFlag()) mode = MENU;
 	if (scene.getSM()) {
 		soundTrack->stopAllSounds();
@@ -45,7 +45,7 @@ bool Game::update(int deltaTime)
 	else if (scene.isdead()) {
 		scene.respawn();
 	}
-	scene.update(deltaTime);
+	
 	level = scene.getLvl();
 	return bPlay;
 }
@@ -73,7 +73,7 @@ void Game::keyPressed(int key)
 		scene.changeCredits();
 		mode = CREDITS;
 	}
-	else if (key == 'q') {
+	if (key == 'q') {
 		if (level == 11) {
 			level = 0;
 			soundTrack->stopAllSounds();

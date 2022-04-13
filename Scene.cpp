@@ -71,7 +71,7 @@ void Scene::respawn() {
 		break;
 	case 11:
 		stopMusic = true;
-		sceneBG->play2D("sound/endingBG.wav", false);
+		//sceneBG->play2D("sound/endingBG.wav", false);
 		glClearColor(0.5254f, 0.1882f, 0.3294f, 1.0f);
 		background.setCloudColor("images/rosita.png");
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 1) * map->getTileSize(), (INIT_PLAYER_Y_TILES + 1) * map->getTileSize()));
@@ -109,78 +109,77 @@ bool Scene::getSM() {
 	return b;
 }
 
-void Scene::update(int deltaTime)
-{
-	
+void Scene::update(int deltaTime) {
 	currentTime += deltaTime;
-		obj.paintObjects(deltaTime);
-		vector<glm::vec3> pos;
-		obj.getClouds(pos);
-		map->setCloudsCol(pos);
-		player->update(deltaTime);
-		if (player->getUnderground()) {
-			glm::vec2 aux = player->getPosition();
-			aux.x -= 64;
-			aux.y -= 64;
-			background.createParticles("images/muerte2.png", aux, texProgram);
-		}
-		if (obj.getStrawberry()) {
-			background.createParticles("images/points.png", obj.getPos(), texProgram);
-			player->updateSB();
-		}
-		obj.checkCollisions(player->getPosition());
-		if (obj.isOpen()) {
-			glm::vec2 newPos = map->openCofre();
-			obj.createObject(12, 0, newPos, "images/fresita.png", glm::vec2(1, 1), texProgram);
-			obj.setOpen(false);
-		}
-		if (obj.isGlobo()) {
-			player->setDash(false);
-			obj.setGlobo(false);
-		}
-		glm::vec2 p;
-		if (map->getCreaFresa(p)) {
-			obj.createObject(1, 0, p, "images/fresita.png", glm::vec2(1, 1), texProgram);
-			map->setCreaFresa(false);
-		}
-			if (player->getPolvillo() == 1) background.createParticles("images/polvo.png", player->getPosition(), texProgram);
-			else if (player->getPolvillo() == 3) {
-				glm::vec2 aux = player->getPosition();
-				aux.x -= 32;
-				background.createParticles("images/polvo2.png", aux, texProgram);
-			}
-			else if (player->getPolvillo() == 4) {
-				glm::vec2 aux = player->getPosition();
-				aux.x += 32;
-				background.createParticles("images/polvo2.png", aux, texProgram);
-			}
-			else if (player->getPolvillo() == 5) {
-				glm::vec2 aux = player->getPosition();
-				aux.y += 32;
-				background.createParticles("images/polvo2.png", aux, texProgram);
-			}
-			else if (player->getPolvillo() == 6) {
-				glm::vec2 aux = player->getPosition();
-				aux.y -= 32;
-				background.createParticles("images/polvo2.png", aux, texProgram);
-			}
-		if (obj.endgamed()) {
-			obj.endendgame();
-			int x = player->getResult();
-			lvl == 11;
-			//sto1pMusic = true;
-			if(x == 0) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo0.png", glm::vec2(1, 1), texProgram);
-			else if (x == 1) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo1.png", glm::vec2(1, 1), texProgram);
-			else if (x == 2) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo2.png", glm::vec2(1, 1), texProgram);
-			else if (x == 3) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo3.png", glm::vec2(1, 1), texProgram);
-			else if (x == 4) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo4.png", glm::vec2(1, 1), texProgram);
-			else if (x == 5) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo5.png", glm::vec2(1, 1), texProgram);
-			else if (x == 6) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo6.png", glm::vec2(1, 1), texProgram);
-			sceneEffects->play2D("sound/ending.wav", false);
-			flagCaught = true;
-		}
-	background.updateBackground(deltaTime);
+	obj.paintObjects(deltaTime);
+	vector<glm::vec3> pos;
+	obj.getClouds(pos);
+	map->setCloudsCol(pos);
 	map->update();
+		
+	if (player->getUnderground()) {
+		glm::vec2 aux = player->getPosition();
+		aux.x -= 64;
+		aux.y -= 64;
+		background.createParticles("images/muerte2.png", aux, texProgram);
+	}
+	if (obj.getStrawberry()) {
+		background.createParticles("images/points.png", obj.getPos(), texProgram);
+		player->updateSB();
+	}
+	obj.checkCollisions(player->getPosition());
+	if (obj.isOpen()) {
+		glm::vec2 newPos = map->openCofre();
+		obj.createObject(12, 0, newPos, "images/fresita.png", glm::vec2(1, 1), texProgram);
+		obj.setOpen(false);
+	}
+	if (obj.isGlobo()) {
+		player->setDash(false);
+		obj.setGlobo(false);
+	}
+	glm::vec2 p;
+	if (map->getCreaFresa(p)) {
+		obj.createObject(1, 0, p, "images/fresita.png", glm::vec2(1, 1), texProgram);
+		map->setCreaFresa(false);
+	}
+		if (player->getPolvillo() == 1) background.createParticles("images/polvo.png", player->getPosition(), texProgram);
+		else if (player->getPolvillo() == 3) {
+			glm::vec2 aux = player->getPosition();
+			aux.x -= 32;
+			background.createParticles("images/polvo2.png", aux, texProgram);
+		}
+		else if (player->getPolvillo() == 4) {
+			glm::vec2 aux = player->getPosition();
+			aux.x += 32;
+			background.createParticles("images/polvo2.png", aux, texProgram);
+		}
+		else if (player->getPolvillo() == 5) {
+			glm::vec2 aux = player->getPosition();
+			aux.y += 32;
+			background.createParticles("images/polvo2.png", aux, texProgram);
+		}
+		else if (player->getPolvillo() == 6) {
+			glm::vec2 aux = player->getPosition();
+			aux.y -= 32;
+			background.createParticles("images/polvo2.png", aux, texProgram);
+		}
+	if (obj.endgamed()) {
+		obj.endendgame();
+		int x = player->getResult();
+		lvl == 11;
+		//sto1pMusic = true;
+		if(x == 0) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo0.png", glm::vec2(1, 1), texProgram);
+		else if (x == 1) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo1.png", glm::vec2(1, 1), texProgram);
+		else if (x == 2) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo2.png", glm::vec2(1, 1), texProgram);
+		else if (x == 3) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo3.png", glm::vec2(1, 1), texProgram);
+		else if (x == 4) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo4.png", glm::vec2(1, 1), texProgram);
+		else if (x == 5) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo5.png", glm::vec2(1, 1), texProgram);
+		else if (x == 6) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo6.png", glm::vec2(1, 1), texProgram);
+		sceneEffects->play2D("sound/ending.wav", false);
+		flagCaught = true;
+	}
+	background.updateBackground(deltaTime);
+	player->update(deltaTime);
 	player->setInfDash(infDash);
 	
 }
@@ -371,24 +370,27 @@ void Scene::changeLevel(int level) {
 		lvl = level;
 		break;
 	}
-	if (level != 11) sceneBG->stopAllSounds();
+	//if (level != 11) sceneBG->stopAllSounds();
 	player->setTileMap(map);
 }
 
 
 void Scene::changeInstrucctions() {
+	lvl = 0;
 	player->setPosition(glm::vec2(-1001, 100));
 	obj.deleteObjects();
 		map = TileMap::createTileMap("levels/pauseScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 }
 
 void Scene::changeCredits() {
+	lvl = 0;
 	player->setPosition(glm::vec2(-1001, 100));
 	obj.deleteObjects();
 	map = TileMap::createTileMap("levels/creditsScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 }
 
 void Scene::changeMainMenu() {
+	lvl = 0;
 	player->setPosition(glm::vec2(-1001, 100));
 	obj.deleteObjects();
 	map = TileMap::createTileMap("levels/startScreen.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
