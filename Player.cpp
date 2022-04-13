@@ -384,7 +384,7 @@ void Player::update(int deltaTime)
 				dashX = 2;
 			}
 			else if (dashY == 0) {
-				
+
 				if (sprite->animation() == MOVE_LEFT || sprite->animation() == STAND_LEFT || sprite->animation() == JUMP_LEFT) {
 					polvillo = 4;
 					dashX = 1;

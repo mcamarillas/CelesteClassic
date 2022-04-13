@@ -2,6 +2,10 @@
 #include <math.h>
 
 
+Background::~Background()
+{
+}
+
 void Background::init(string s, glm::vec2 position, glm::vec2 dimension,int speed, ShaderProgram& shaderProgram){
 	this->position.x = position.x * 32;
 	this->position.y = position.y * 32;

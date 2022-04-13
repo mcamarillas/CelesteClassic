@@ -67,7 +67,11 @@ void Scene::update(int deltaTime)
 		obj.getClouds(pos);
 		map->setCloudsCol(pos);
 		player->update(deltaTime);
-		if (obj.getStrawberry()) player->updateSB();
+		if(player->getUnderground()) background.createParticles("images/muerte.png", player->getPosition(), texProgram);
+		if (obj.getStrawberry()) {
+			//background.createParticles("images/polvo2.png", aux, texProgram);
+			player->updateSB();
+		}
 		obj.checkCollisions(player->getPosition());
 		if (obj.isOpen()) {
 			glm::vec2 newPos = map->openCofre();
@@ -107,13 +111,13 @@ void Scene::update(int deltaTime)
 		if (obj.endgamed()) {
 			obj.endendgame();
 			int x = player->getResult();
-			if(x == 0) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo1.png", glm::vec2(1, 1), texProgram);
-			else if (x == 1) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo1.png", glm::vec2(1, 1), texProgram);
-			else if (x == 2) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo2.png", glm::vec2(1, 1), texProgram);
-			else if (x == 3) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo3.png", glm::vec2(1, 1), texProgram);
-			else if (x == 4) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo4.png", glm::vec2(1, 1), texProgram);
-			else if (x == 5) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo5.png", glm::vec2(1, 1), texProgram);
-			else if (x == 6) obj.createObject(5, 5, glm::vec2(5, 0), "images/fondo6.png", glm::vec2(1, 1), texProgram);
+			if(x == 0) obj.createObject(5, 5, glm::vec2(4.5, 1), "images/fondo0.png", glm::vec2(1, 1), texProgram);
+			else if (x == 1) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo1.png", glm::vec2(1, 1), texProgram);
+			else if (x == 2) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo2.png", glm::vec2(1, 1), texProgram);
+			else if (x == 3) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo3.png", glm::vec2(1, 1), texProgram);
+			else if (x == 4) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo4.png", glm::vec2(1, 1), texProgram);
+			else if (x == 5) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo5.png", glm::vec2(1, 1), texProgram);
+			else if (x == 6) obj.createObject(5, 5, glm::vec2(4.5, 0), "images/fondo6.png", glm::vec2(1, 1), texProgram);
 			sceneEffects->play2D("sound/ending.wav", false);
 		}
 	background.updateBackground(deltaTime);
@@ -272,7 +276,7 @@ void Scene::changeLevel(int level) {
 		player->setPosition(glm::vec2((INIT_PLAYER_X_TILES + 2) * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 		map = TileMap::createTileMap("levels/level09.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		obj.createObject(1, 2, glm::vec2(8, 4), "images/globo.png", glm::vec2(1. / 3, 1), texProgram);
-		obj.createObject(2, 2, glm::vec2(4, 4), "images/globo.png", glm::vec2(1. / 3, 1), texProgram);
+		obj.createObject(2, 2, glm::vec2(4.5, 4), "images/globo.png", glm::vec2(1. / 3, 1), texProgram);
 		lvl = level;
 		s = "levels/level09.txt";
 		break;

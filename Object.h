@@ -14,6 +14,7 @@ class Object
 	
 public:
 	Object(int id,int type, glm::vec2 position, string s, glm::vec2 d, ShaderProgram& shaderProgram);
+	~Object();
 	glm::vec2 getPosition();
 	void setPosition(glm::vec2 position);
 	void update(int deltaTime);

@@ -24,6 +24,11 @@ Object::Object(int id, int type, glm::vec2 position, string s, glm::vec2 d, Shad
 	sprite->setPosition(position);
 }
 
+Object::~Object()
+{
+	int x;
+}
+
 glm::vec2 Object::getPosition() {
 	return position;
 }

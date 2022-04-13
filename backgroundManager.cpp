@@ -59,6 +59,7 @@ void backgroundManager::updateBackground(int deltaTime) {
 	}
 	for (std::map<int, Background*>::iterator it = particles.begin(); it != particles.end(); ++it) {
 		if (it->second->addTicks() == 25) {
+			delete it->second;
 			particles.erase(it);
 			break;
 		}

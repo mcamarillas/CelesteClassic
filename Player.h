@@ -40,6 +40,7 @@ public:
 private:
     bool bJumping;
     bool cPressed;
+    bool xPressed;
     bool isDashing;
     void Yanimations();
     bool leftCol, rightCol, downCol, upCol;

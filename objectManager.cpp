@@ -15,6 +15,9 @@ bool objectManager::getStrawberry() {
 }
 
 void objectManager::deleteObjects() {
+	for (std::map<int, Object*>::iterator it = objects.begin(); it != objects.end(); ++it) {
+		delete it->second;
+	}
 	objects.clear();
 }
 void objectManager::paintObjects(int deltaTime) {
@@ -46,6 +49,7 @@ void objectManager::checkCollisions(glm::vec2 posPlayer) {
 			if (it->second->getType() == 1) open = true;
 			if (it->second->getType() == 2) globo = true;
 			if (it->second->getType() == 3) endgame = true;
+			delete it->second;
 			objects.erase(it);
 			break;
 		}
